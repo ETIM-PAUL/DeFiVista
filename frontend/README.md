@@ -1,32 +1,46 @@
-# Cartesi frontend web
+<div align="center">
+    <h1>Cartesi Frontend Web Lite</h1>
+    <i>An simple version of a web frontend to interact with Cartesi dApps</i>
+</div>
+<div align="center">
+  This repository contains an boiler plate for a Web Frontend to Interact with Cartesi dApps.
+</div>
 
-```
-Cartesi Rollups version: 1.0.x
-```
+<div align="center">
+  
+  <a href="">[![Static Badge](https://img.shields.io/badge/cartesi--rollups-1.0.0-5bd1d7)](https://docs.cartesi.io/cartesi-rollups/)</a>
+  <a href="">[![Static Badge](https://img.shields.io/badge/sunodo-0.9.5-blue
+)</a>
+  <a href="">[![Static Badge](https://img.shields.io/badge/react-18.1.0-red)](https://react.dev/)</a>
+</div>
 
 ## Features
 
 With this project you can test some interactions with the Cartesi Rollups project:
 
 1. Metamask integration
-2. Send Inspect state Requests and Listing Reports response
-3. Sending Dapp Address with the DApp Relay
-4. Sending inputs
-5. Depositing Ether
-6. Depositing ERC20
-7. Depositing ERC721
-8. Depositing ERC1155 Single
-9. Depositing ERC1155 Batch
-10. Listing Notices
-11. Listing Reports
-12. Listing Vouchers
-13. Executing Vouchers
+2. Sending Dapp Address with the DApp Relay
+3. Sending inputs
+4. Listing Notices
+5. Listing Reports
+6. Listing Vouchers
+7. Executing Vouchers
 
-## Configurtion
+## Configuration
 
 Edit src/config.json to set the testnet parameters and deployment, inspect, graphql, rpc addresses.
 
-## Available Scripts
+### Metamask
+
+You will need one to import one of our test wallets imported to the metamask to send inputs to the local blockchain where the dApps is running. Remeber to get one of the private keys in the start of the log of the backend. To see a private key, run the backend with a verbose flag enabled:
+
+```
+sunodo run --verbose
+```
+
+where at the start of the log you will see one of those private keys. Add one of them to the metamask.
+
+## Building the frontend
 
 In the project directory, run:
 
@@ -46,12 +60,12 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Voucher Notes
 
-To execute Vouchers, the voucher epoch must be finalized so the rollups framework generate the proofs.
-As a reminder, you can advance time in hardhat with the command:
+Remeber to execute the backend application with a low epoch duration to test the execution of the vouchers. To do that, in the [backend](../backend) folder , execute:
 
-```shell
-curl --data '{"id":1337,"jsonrpc":"2.0","method":"evm_increaseTime","params":[864010]}' http://localhost:8545
+```
+sunodo run --epoch-duration 30
+
 ```
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/lynoferraz/frontend-web-cartesi)
+where 30 is the time in seconds of an epoch.
 
