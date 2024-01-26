@@ -1,33 +1,107 @@
 const { ethers } = require("ethers");
+const company_action = require("./company");
 
 const rollup_server = process.env.ROLLUP_HTTP_SERVER_URL;
 console.log("HTTP rollup_server url is " + rollup_server);
 
 async function handle_advance(data) {
   console.log("Received advance request data " + JSON.stringify(data));
-  const payload = data["payload"];
+  const payload = data.payload;
+  let JSONpayload = {};
   try {
+    if (
+      String(data.metadata.msg_sender).toLowerCase() ===
+      DAPP_ADDRESS_REALY.toLowerCase()
+    ) {
+      console.log("setting Dapp address:", payload);
+      DAPP_ADDRESS = payload;
+    }
+
+    console.log("payload:" + JSON.stringify(payload));
     const payloadStr = ethers.toUtf8String(payload);
-    console.log(`Adding notice "${payloadStr}"`);
+    JSONpayload = JSON.parse(payloadStr);
+    console.log(`received request ${JSON.stringify(JSONpayload)}`);
+
   } catch (e) {
+
+    console.log("error is:", e);
     console.log(`Adding notice with binary value "${payload}"`);
+    await fetch(rollup_server + "/report", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ payload: payload }),
+    });
+    return "reject";
   }
-  const advance_req = await fetch(rollup_server + "/notice", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ payload }),
-  });
+
+  let advance_req;
+
+  try {
+    //{"method":"company_create","name":"web3Bridge","companyLogo":"X7sdsa8ycn","pricePerShare":"0.01","minShare":"3","country":"Nigeria","regNum":"8726252"}
+    if (JSONpayload.method === "company_create") {
+      console.log("creating company....");
+      const createdCompany = company_action.company_create(
+        JSONpayload.name,
+        data.metadata.msg_sender,
+        JSONpayload.companyLogo,
+        JSONpayload.pricePerShare,
+        JSONpayload.minShare,
+        JSONpayload.country,
+        JSONpayload.regNum,
+      );
+      console.log("created country is:", createdCompany);
+
+      const result = JSON.stringify({ createdCompany: createdCompany });
+      // convert result to hex
+      const hexresult = stringToHex(result);
+      console.log("The result is :", hexresult);
+      advance_req = await fetch(rollup_server + "/notice", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ payload: hexresult }),
+      });
+
+      //{"method":"update_company_status", "company": "1","new_status":"1"}
+    } else if (JSONpayload.method === "update_company_status") {
+      let updatedCompanyStatus = company_action.update_company_status(JSONpayload.company_id, JSONpayload.new_status, ethers.getAddress(JSONpayload.user));
+      console.log("updating company status....");
+      console.log("updated company: " + JSON.stringify(updatedCompanyStatus));
+
+      //{"method":"update_company_status", "company": "1","new_status":"1"}
+    } else if (JSONpayload.method === "update_company_status") {
+      let updatedCompanyStatus = company_action.update_company_status(JSONpayload.company_id, JSONpayload.new_status, ethers.getAddress(JSONpayload.user));
+      console.log("updating company status....");
+      console.log("updated company: " + JSON.stringify(updatedCompanyStatus));
+    }
+
+  } catch (e) {
+    console.log("error is:", e);
+    await fetch(rollup_server + "/report", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        payload: stringToHex(JSON.stringify({ error: e })),
+      }),
+    });
+    return "reject";
+  }
   const json = await advance_req.json();
   console.log(
-    "Received notice status " +
+    "Received  status " +
     advance_req.status +
     " with body " +
     JSON.stringify(json)
   );
   return "accept";
+
 }
+
 
 async function handle_inspect(data) {
   console.log("Received inspect request data " + JSON.stringify(data));
@@ -54,12 +128,10 @@ var handlers = {
   inspect_state: handle_inspect,
 };
 
-var finish = { status: "accept" };
+var finish = { status: "Shares Acquisition Started" };
 
 (async () => {
   while (true) {
-    console.log("Sending finish");
-
     const finish_req = await fetch(rollup_server + "/finish", {
       method: "POST",
       headers: {
@@ -74,8 +146,20 @@ var finish = { status: "accept" };
       console.log("No pending rollup request, trying again");
     } else {
       const rollup_req = await finish_req.json();
-      var handler = handlers[rollup_req["request_type"]];
-      finish["status"] = await handler(rollup_req["data"]);
+
+      var typeq = rollup_req.request_type;
+      var handler;
+      if (typeq === "inspect_state") {
+        handler = handlers.inspect_state;
+      } else {
+        handler = handlers.advance_state;
+      }
+      var output = await handler(rollup_req.data);
+      finish.status = "accept";
+      if (output instanceof Error_out) {
+        finish.status = "reject";
+      }
+      await send_request(output);
     }
   }
 })();

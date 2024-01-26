@@ -2,16 +2,12 @@ import { getAddress } from 'viem'
 import { Wallet } from "./wallet";
 import { Error_out, Log, Notice, Output } from "./outputs";
 
-// Function to find a specific player from players list
-function findCompany(allCompanies, companyAddress) {
-  console.log("allCompanies: ", allCompanies, "companyAddress: ", companyAddress);
-  const foundPlayer = allPlayers.find(player => player.walletAddress === playerAddress);
-  return foundPlayer;
-}
 
 class DeFiVistaAdmin {
   defiVestAdmins = [getAddress("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"), getAddress("0xf3b74384445fD0CE94b1aecBa1791eE0c1Ca49AA")];
   companies = new Map();
+  cartesi_address = getAddress();
+
   wallet;
   constructor(wallet) {
     this.companies = new Map();
@@ -22,7 +18,6 @@ class DeFiVistaAdmin {
     companyName,
     companyAdminAddress,
     companyLogo,
-    totalShares,
     pricePerShare,
     minShare,
     country,
@@ -33,7 +28,6 @@ class DeFiVistaAdmin {
         companyName,
         companyAdminAddress,
         companyLogo,
-        totalShares,
         pricePerShare,
         minShare,
         country,
@@ -48,7 +42,6 @@ class DeFiVistaAdmin {
         companyAdminAddress,
         companyLogo,
         description,
-        totalShares,
         minShare,
         pricePerShare,
         country,
@@ -82,7 +75,7 @@ class DeFiVistaAdmin {
         );
       }
       if (!this.company_exist(
-        msg.sender)) {
+        company_id)) {
         throw new EvalError(
           `company doesn't exist`
         );
@@ -90,13 +83,13 @@ class DeFiVistaAdmin {
 
       // Access and update the object in the map
       let keyToUpdate = company_id;
-      if (myMap.has(keyToUpdate)) {
-        let updatedObject = myMap.get(keyToUpdate);
+      if (companies.has(keyToUpdate)) {
+        let updatedObject = companies.get(keyToUpdate);
         updatedObject.status = new_status;
 
         // Update the object in the map
-        myMap.set(keyToUpdate, updatedObject);
-        console.log('Updated Map:', myMap);
+        companies.set(keyToUpdate, updatedObject);
+        console.log('Updated Map:', companies);
       }
 
       let company_json = JSON.stringify(company);
@@ -118,12 +111,149 @@ class DeFiVistaAdmin {
     }
   }
 
+  shares_purchase(
+    msg_sender,
+    company_id,
+    amount_of_shares,
+    amount,
+  ) {
+    try {
+      if (!this.company_exist(
+        company_id)) {
+        throw new EvalError(
+          `company doesn't exist`
+        );
+      }
+      const company = this.companies.get(company_id);
+      if (share_holder === company.companyAdminAddress) {
+        throw new EvalError(`${msg_sender} cannot buy shares in their own company`);
+      }
+      if (amount <= 0) {
+        throw new EvalError(`Amount ${amount} must be greater than zero`);
+        return;
+      }
+      // if (!this.has_enough_funds(msg_sender, amount)) {
+      //   throw new EvalError(`Account ${msg_sender} doesn't have enough funds`);
+      // }
+
+      // this.wallet._ether_deposit(
+      //   getAddress(winning_bid.author),
+      //   getAddress(auction.creator),
+      //   getAddress(auction.erc20),
+      //   BigInt(winning_bid.amount.toString())
+      // );
+
+      const details = { msg_sender, company_id, amount_of_shares, amount }
+
+
+      company.acquisition(details);
+
+      //update price of shares as more buyers buy
+      let keyToUpdate = company_id;
+      if (companies.has(keyToUpdate)) {
+        let updatedObject = companies.get(keyToUpdate);
+        updatedObject.pricePerShare = (updatedObject.pricePerShare + ((amount_of_shares / 100) * 10));
+
+        // Update the object in the map
+        companies.set(keyToUpdate, updatedObject);
+        console.log('Company Shares price updated:', companies);
+      }
+
+
+      const shares_json = JSON.stringify({ share_holder, company_id, amount_of_shares, amount });
+      console.log(`Shares Acquisition worth ${amount} gotten for ${company_id}`);
+      return new Notice(`{{"type":"shares_purchase","content":${shares_json}}}`);
+    } catch (e) {
+      const error_msg = `failed to acquire shares ${e}`;
+      console.debug(error_msg);
+      return new Error_out(error_msg);
+    }
+  }
+
+  shares_withdraw(
+    msg_sender,
+    company_id,
+  ) {
+    try {
+      if (!this.company_exist(
+        company_id)) {
+        throw new EvalError(
+          `company doesn't exist`
+        );
+      }
+      const company = this.companies.get(company_id);
+      if (share_holder === company.companyAdminAddress) {
+        throw new EvalError(`${msg_sender} cannot withdraw shares in your own company`);
+      }
+      if (amount_of_shares <= 0) {
+        throw new EvalError(`Amount ${amount} must be greater than zero`);
+        return;
+      }
+      // if (!this.has_enough_funds(msg_sender, amount)) {
+      //   throw new EvalError(`Account ${msg_sender} doesn't have enough funds`);
+      // }
+
+      // this.wallet._ether_deposit(
+      //   getAddress(winning_bid.author),
+      //   getAddress(auction.creator),
+      //   getAddress(auction.erc20),
+      //   BigInt(winning_bid.amount.toString())
+      // );
+
+      const details = { msg_sender, company_id, amount_of_shares, amount }
+
+      company.acquisition_withdraw(msg_sender, company_id);
+
+      //update price of shares as more buyers buy
+      let keyToUpdate = company_id;
+      if (companies.has(keyToUpdate)) {
+        let updatedObject = companies.get(keyToUpdate);
+        updatedObject.pricePerShare = (updatedObject.pricePerShare - ((amount_of_shares / 100) * 10));
+
+        // Update the object in the map
+        companies.set(keyToUpdate, updatedObject);
+        console.log('Company Shares price updated:', companies);
+      }
+
+
+      const shares_json = JSON.stringify({ share_holder, company_id, amount_of_shares, amount });
+      console.log(`Shares Acquisition worth ${amount} withdraw for ${company_id}`);
+      return new Notice(`{{"type":"shares_withdraw","content":${shares_json}}}`);
+    } catch (e) {
+      const error_msg = `failed to withdraw shares ${e}`;
+      console.debug(error_msg);
+      return new Error_out(error_msg);
+    }
+  }
+
   company_get(company_id) {
     try {
-      let company_json = JSON.stringify(this.companies.get(company_id));
-      return new Log(company_json);
+      if (!this.company_exist(
+        company_id)) {
+        throw new EvalError(
+          `company doesn't exist`
+        );
+      }
+      return new Log(JSON.stringify(company_json));
     } catch (e) {
-      return new Error_out(`Company id ${auction_id} not found`);
+      return new Error_out(`Company id ${company_id} not found`);
+    }
+  }
+
+  company_shareholders(company_id) {
+    try {
+      let company = this.companies.get(company_id);
+      if (!this.company_exist(
+        company_id)) {
+        throw new EvalError(
+          `company doesn't exist`
+        );
+      }
+      return new Log(JSON.stringify(company.shareHolders));
+    } catch (e) {
+      let error_msg = `failed to list shareHolders for company id ${company_id} ${e}`;
+      console.debug(error_msg);
+      return new Error_out(error_msg);
     }
   }
 
@@ -138,6 +268,45 @@ class DeFiVistaAdmin {
     return new Log(companies_json);
   }
 
+  get_companies() {
+    if (!this.isDappAdminAction(
+      msg_sender)) {
+      throw new EvalError(
+        `not DeFiVista admin`
+      );
+    }
+    // Filter objects in the map based on a condition
+    const filteredObjects = Array.from(companies).filter(([key, value]) => {
+      // Replace the condition with your own filtering logic
+      return value.status === 1;
+    });
+
+    // Create a new Map from the filtered array
+    const filteredMap = new Map(filteredObjects);
+    let companies_json = JSON.stringify(filteredMap);
+    return new Log(companies_json);
+  }
+
+  get_user_shares(msg_sender) {
+    const userSharesCompany = [];
+    // Filter objects in the map based on a condition
+    const filteredObjects = Array.from(companies).filter((value, key) => value.status === 1);
+
+    for (let index = 0; index < filteredObjects.length; index++) {
+      const element = filteredObjects[index];
+      for (let index = 0; index < element.shareHolders.length; index++) {
+        const companyShares = element[index].shareHolders;
+        if (companyShares.msg_sender == msg_sender) {
+          userSharesCompany.push(element);
+        }
+      }
+    }
+    // Create a new Map from the filtered array
+    const filteredMap = new Map(userSharesCompany);
+    let companies_json = JSON.stringify(filteredMap);
+    return new Log(companies_json);
+  }
+
   isDappAdminAction(msg_sender) {
     this.defiVestAdmins.forEach((admin, key) => {
       if (admin != msg_sender) {
@@ -148,11 +317,12 @@ class DeFiVistaAdmin {
   }
 
   company_exist(company_id) {
-    let company_json = JSON.stringify(this.companies.get(company_id));
-    if (company_json) {
-      return true;
-    } else {
+    let company_json = this.companies.get(company_id);
+    if (company_json == null) {
       return false;
+    }
+    else {
+      return true;
     }
   }
 
@@ -171,6 +341,15 @@ class DeFiVistaAdmin {
     } else {
       return true;
     }
+  }
+
+  has_enough_funds(share_holder, amount) {
+    let balance = this.wallet.balance_get(getAddress(share_holder));
+    let erc20_balance = balance.erc20_get(getAddress(cartesi_address));
+    if (cartesi_address === undefined) {
+      return false;
+    }
+    return BigInt(amount) <= erc20_balance;
   }
 }
 

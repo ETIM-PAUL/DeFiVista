@@ -1,56 +1,3 @@
-class BuyShare {
-  company_id!: number;
-  author!: string;
-  amount!: number;
-  timestamp!: Date;
-  constructor(
-    auction_id: number,
-    author: string,
-    amount: number,
-    timestamp: Date
-  ) {
-    if (amount <= 0) {
-      throw new EvalError(`Amount ${amount} must be greater than zero`);
-      return;
-    }
-    this.auction_id = auction_id;
-    this.author = author;
-    this.amount = amount;
-    this.timestamp = timestamp;
-  }
-  _eq(other: Bid) {
-    return (
-      this.author === other.author &&
-      this.auction_id === other.auction_id &&
-      this.amount === other.amount &&
-      this.timestamp === other.timestamp
-    );
-  }
-
-  _ne(other: Bid) {
-    return (
-      this.author != other.author &&
-      this.auction_id != other.auction_id &&
-      this.amount != other.amount &&
-      this.timestamp != other.timestamp
-    );
-  }
-
-  _gt(other: Bid) {
-    return (
-      this.amount > other.amount ||
-      (this.amount == other.amount && this.timestamp < other.timestamp)
-    );
-  }
-
-  _lt(other: Bid) {
-    return (
-      this.amount < other.amount ||
-      (this.amount == other.amount && this.timestamp > other.timestamp)
-    );
-  }
-}
-
 class CompanyShares {
   static curr_id = 0;
   id;
@@ -71,7 +18,6 @@ class CompanyShares {
     description,
     companyAdminAddress,
     companyLogo,
-    totalShares,
     minShare,
     pricePerShare,
     country,
@@ -88,7 +34,6 @@ class CompanyShares {
     this.description = description;
     this.companyAdminAddress = companyAdminAddress;
     this.companyLogo = companyLogo;
-    this.totalShares = totalShares;
     this.minShare = minShare;
     this.pricePerShare = pricePerShare;
     this.country = country;
@@ -122,43 +67,65 @@ class CompanyShares {
   getCompanyReg() {
     return this.regNum;
   }
-  getHighestShareHolder() {
-    if (this.shareHolders.length === 0) {
-      return undefined;
-    }
-    return this.shareHolders[this.shareHolders.length - 1];
-  }
   getShareHolders() {
     return this.shareHolders;
   }
 
-  // shareHolder(bid: Bid) {
-  //   if (this.state == Status.FINISHED) {
-  //     throw new EvalError("the auction has already been finished");
-  //   }
-  //   if (bid.auction_id != this.id) {
-  //     throw new EvalError(`Auciton id ${bid.auction_id} does not match`);
-  //   }
-  //   if (bid.amount < this.min_bid_amount) {
-  //     throw new EvalError(
-  //       `Bid amount ${bid.amount} did not not meet minimum bid amount`
-  //     );
-  //   }
-  //   const winning_bid = this.getWinning_bid();
-  //   if (winning_bid === undefined || bid._gt(winning_bid)) {
-  //     this.bids.push(bid);
-  //   } else {
-  //     throw new EvalError(
-  //       `bid amoujnt ${bid.amount} is not greater than the currnent winning bid amount ${winning_bid.amount} `
-  //     );
-  //   }
-  //   if (this.state === Status.CREATED) {
-  //     this.state = Status.STARTED;
-  //   }
-  // }
-  // finish() {
-  //   this.state = Status.FINISHED;
-  // }
+  acquisition(acquisition) {
+    if (acquisition.company_id != this.id) {
+      throw new EvalError(`Company id ${acquisition.company_id} does not match`);
+    }
+    if (this.status == 0) {
+      throw new EvalError("This company isn't active");
+    }
+    if (acquisition.amount_of_shares < this.minShare) {
+      throw new EvalError(
+        `Acquisition shares ${acquisition.minShare} did not not meet minimum shares`
+      );
+    }
+    if (acquisition.amount < (this.pricePerShare * acquisition.amount_of_shares)) {
+      throw new EvalError(
+        `Acquisition amount ${acquisition.amount} did not not meet total price`
+      );
+    }
+
+    // Check if an object with the given name already exists
+    const existingObjectIndex = this.shareHolders.findIndex(obj => obj.msg_sender.toLowerCase() === acquisition?.msg_sender.toLowerCase());
+
+    if (existingObjectIndex !== -1) {
+      // If the object exists, update the amount
+      this.shareHolders[existingObjectIndex].amount_of_shares += acquisition?.amount_of_shares;
+    } else {
+      // If the object doesn't exist, add a new object
+      this.shareHolders.push(acquisition);
+    }
+  }
+
+  acquisition_withdraw(msg_sender, company_id, amount) {
+    if (company_id != this.id) {
+      throw new EvalError(`Company id ${company_id} does not match`);
+    }
+    if (this.status == 0) {
+      throw new EvalError("This company isn't active");
+    }
+
+    // Check if an object with the given name already exists
+    const existingObjectIndex = this.shareHolders.findIndex(obj => obj.msg_sender.toLowerCase() === msg_sender.toLowerCase());
+
+    if (existingObjectIndex !== -1) {
+      if (this.shareHolders[existingObjectIndex].amount_of_shares < amount) {
+        // If the object doesn't exist, add a new object
+        throw new EvalError("Insufficient shares amount");
+      }
+      // If the object exists, update the amount
+      this.shareHolders[existingObjectIndex].amount_of_shares -= amount;
+    } else {
+      // If the object doesn't exist, add a new object
+      throw new EvalError("No shares in this company");
+    }
+
+    this.shareHolders.push(acquisition);
+  }
 }
 
-export { CompanyShares, ShareHolder, Item, Status };
+export { CompanyShares };
