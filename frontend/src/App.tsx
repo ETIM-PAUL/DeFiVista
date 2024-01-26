@@ -55,8 +55,6 @@ const App: FC = () => {
                     />
                     <br /><br />
                 </div>
-                <h2>Inspect</h2>
-                <Inspect />
                 <h2>Input</h2>
                 <Input dappAddress={dappAddress} />
                 <h2>Reports</h2>
