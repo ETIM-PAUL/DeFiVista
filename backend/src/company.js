@@ -128,10 +128,10 @@ class DeFiVistaAdmin {
       if (share_holder === company.companyAdminAddress) {
         throw new EvalError(`${msg_sender} cannot buy shares in their own company`);
       }
-      if (amount <= 0) {
-        throw new EvalError(`Amount ${amount} must be greater than zero`);
-        return;
-      }
+      // if (amount <= 0) {
+      //   throw new EvalError(`Amount ${amount} must be greater than zero`);
+      //   return;
+      // }
       // if (!this.has_enough_funds(msg_sender, amount)) {
       //   throw new EvalError(`Account ${msg_sender} doesn't have enough funds`);
       // }
@@ -257,7 +257,7 @@ class DeFiVistaAdmin {
     }
   }
 
-  companies_getAll_admin() {
+  companies_get_admin() {
     if (!this.isDappAdminAction(
       msg_sender)) {
       throw new EvalError(

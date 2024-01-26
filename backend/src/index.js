@@ -67,15 +67,51 @@ async function handle_advance(data) {
 
       //{"method":"update_company_status", "company": "1","new_status":"1"}
     } else if (JSONpayload.method === "update_company_status") {
-      let updatedCompanyStatus = company_action.update_company_status(JSONpayload.company_id, JSONpayload.new_status, ethers.getAddress(JSONpayload.user));
+      let updatedCompanyStatus = company_action.update_company_status(JSONpayload.company_id, JSONpayload.new_status, data.metadata.msg_sender);
       console.log("updating company status....");
       console.log("updated company: " + JSON.stringify(updatedCompanyStatus));
 
-      //{"method":"update_company_status", "company": "1","new_status":"1"}
-    } else if (JSONpayload.method === "update_company_status") {
-      let updatedCompanyStatus = company_action.update_company_status(JSONpayload.company_id, JSONpayload.new_status, ethers.getAddress(JSONpayload.user));
-      console.log("updating company status....");
-      console.log("updated company: " + JSON.stringify(updatedCompanyStatus));
+      //{"method":"shares_purchase", "company": "1","new_status":"1"}
+    } else if (JSONpayload.method === "shares_purchase") {
+      let sharesAcquisition = company_action.shares_purchase(data.metadata.msg_sender, JSONpayload.company_id, JSONpayload.amount_of_shares, JSONpayload.amount);
+      console.log("buying company status....");
+      console.log("shares bought: " + JSON.stringify(sharesAcquisition));
+    }
+    //{"method":"shares_withdraw", "msg_sender":"your address","company": "1"}
+    else if (JSONpayload.method === "shares_withdraw") {
+      let sharesWithdrawal = company_action.shares_withdraw(data.metadata.msg_sender, JSONpayload.company_id);
+      console.log("withdrawing company status....");
+      console.log("shares withdrawn: " + JSON.stringify(sharesWithdrawal));
+    }
+    //{"method":"company_get", "company": "1"}
+    else if (JSONpayload.method === "company_get") {
+      let companyDetails = company_action.company_get(JSONpayload.company_id);
+      console.log("getting company details....");
+      console.log("company details: " + JSON.stringify(companyDetails));
+    }
+    //{"method":"company_shareholders", "company": "1"}
+    else if (JSONpayload.method === "company_shareholders") {
+      let companyShareholders = company_action.company_shareholders(JSONpayload.company_id);
+      console.log("getting company shareholders....");
+      console.log("company shareholders: " + JSON.stringify(companyShareholders));
+    }
+    //{"method":"companies_get_admin"}
+    else if (JSONpayload.method === "companies_get_admin") {
+      let allCompanies = company_action.companies_get_admin();
+      console.log("getting all company....");
+      console.log("companies in the dapp: " + JSON.stringify(allCompanies));
+    }
+    //{"method":"get_companies"}
+    else if (JSONpayload.method === "get_companies") {
+      let activeCompanies = company_action.get_companies();
+      console.log("getting all active company....");
+      console.log("active companies in the dapp: " + JSON.stringify(activeCompanies));
+    }
+    //{"method":"get_user_shares"}
+    else if (JSONpayload.method === "get_user_shares") {
+      let myShares = company_action.get_user_shares(data.metadata.msg_sender);
+      console.log("getting all your shares balance....");
+      console.log("your shares balance across companies in the dapp: " + JSON.stringify(myShares));
     }
 
   } catch (e) {
