@@ -21,9 +21,7 @@ async function handle_advance(data) {
     const payloadStr = ethers.toUtf8String(payload);
     JSONpayload = JSON.parse(payloadStr);
     console.log(`received request ${JSON.stringify(JSONpayload)}`);
-
   } catch (e) {
-
     console.log("error is:", e);
     console.log(`Adding notice with binary value "${payload}"`);
     await fetch(rollup_server + "/report", {
@@ -49,9 +47,9 @@ async function handle_advance(data) {
         JSONpayload.pricePerShare,
         JSONpayload.minShare,
         JSONpayload.country,
-        JSONpayload.regNum,
+        JSONpayload.regNum
       );
-      console.log("created country is:", createdCompany);
+      console.log("created company is:", createdCompany);
 
       const result = JSON.stringify({ createdCompany: createdCompany });
       // convert result to hex
@@ -67,19 +65,31 @@ async function handle_advance(data) {
 
       //{"method":"update_company_status", "company": "1","new_status":"1"}
     } else if (JSONpayload.method === "update_company_status") {
-      let updatedCompanyStatus = company_action.update_company_status(JSONpayload.company_id, JSONpayload.new_status, data.metadata.msg_sender);
+      let updatedCompanyStatus = company_action.update_company_status(
+        JSONpayload.company_id,
+        JSONpayload.new_status,
+        data.metadata.msg_sender
+      );
       console.log("updating company status....");
       console.log("updated company: " + JSON.stringify(updatedCompanyStatus));
 
       //{"method":"shares_purchase", "company": "1","new_status":"1"}
     } else if (JSONpayload.method === "shares_purchase") {
-      let sharesAcquisition = company_action.shares_purchase(data.metadata.msg_sender, JSONpayload.company_id, JSONpayload.amount_of_shares, JSONpayload.amount);
+      let sharesAcquisition = company_action.shares_purchase(
+        data.metadata.msg_sender,
+        JSONpayload.company_id,
+        JSONpayload.amount_of_shares,
+        JSONpayload.amount
+      );
       console.log("buying company status....");
       console.log("shares bought: " + JSON.stringify(sharesAcquisition));
     }
     //{"method":"shares_withdraw", "msg_sender":"your address","company": "1"}
     else if (JSONpayload.method === "shares_withdraw") {
-      let sharesWithdrawal = company_action.shares_withdraw(data.metadata.msg_sender, JSONpayload.company_id);
+      let sharesWithdrawal = company_action.shares_withdraw(
+        data.metadata.msg_sender,
+        JSONpayload.company_id
+      );
       console.log("withdrawing company status....");
       console.log("shares withdrawn: " + JSON.stringify(sharesWithdrawal));
     }
@@ -91,9 +101,13 @@ async function handle_advance(data) {
     }
     //{"method":"company_shareholders", "company": "1"}
     else if (JSONpayload.method === "company_shareholders") {
-      let companyShareholders = company_action.company_shareholders(JSONpayload.company_id);
+      let companyShareholders = company_action.company_shareholders(
+        JSONpayload.company_id
+      );
       console.log("getting company shareholders....");
-      console.log("company shareholders: " + JSON.stringify(companyShareholders));
+      console.log(
+        "company shareholders: " + JSON.stringify(companyShareholders)
+      );
     }
     //{"method":"companies_get_admin"}
     else if (JSONpayload.method === "companies_get_admin") {
@@ -105,15 +119,19 @@ async function handle_advance(data) {
     else if (JSONpayload.method === "get_companies") {
       let activeCompanies = company_action.get_companies();
       console.log("getting all active company....");
-      console.log("active companies in the dapp: " + JSON.stringify(activeCompanies));
+      console.log(
+        "active companies in the dapp: " + JSON.stringify(activeCompanies)
+      );
     }
     //{"method":"get_user_shares"}
     else if (JSONpayload.method === "get_user_shares") {
       let myShares = company_action.get_user_shares(data.metadata.msg_sender);
       console.log("getting all your shares balance....");
-      console.log("your shares balance across companies in the dapp: " + JSON.stringify(myShares));
+      console.log(
+        "your shares balance across companies in the dapp: " +
+          JSON.stringify(myShares)
+      );
     }
-
   } catch (e) {
     console.log("error is:", e);
     await fetch(rollup_server + "/report", {
@@ -130,14 +148,12 @@ async function handle_advance(data) {
   const json = await advance_req.json();
   console.log(
     "Received  status " +
-    advance_req.status +
-    " with body " +
-    JSON.stringify(json)
+      advance_req.status +
+      " with body " +
+      JSON.stringify(json)
   );
   return "accept";
-
 }
-
 
 async function handle_inspect(data) {
   console.log("Received inspect request data " + JSON.stringify(data));
