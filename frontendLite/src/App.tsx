@@ -11,6 +11,8 @@ import { Network } from "./Network";
 import { Vouchers } from "./Vouchers";
 import { Reports } from "./Reports";
 import configFile from "./config.json";
+import HomePage from "./pages/HomePage";
+import MainNav from "./layout/MainNav";
 
 const config: any = configFile;
 
@@ -39,15 +41,16 @@ const App: FC = () => {
   );
 
   return (
-    <div className="bg-white">
-      <span className="text-red-500 font-bold text-5xl">jjj</span>
+    <div className="bg-slate-300 h-screen">
+      <MainNav />
+
+      <HomePage />
+
       {/* <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="products" element={<ProductsPage />} />
-        <Route path="about-us" element={<AboutPage />} />
-        <Route path="contact-us" element={<ContactPage />} />
-      </Routes> */}
+     
+
+
+
 
       {/*  */}
       {/* <Network /> */}
