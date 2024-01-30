@@ -1,18 +1,10 @@
-import { Voucher, Notice, Error_out, Log, Output, Report } from "./outputs";
-import { Balance } from "./balance";
+import { Voucher, Notice, Error_out, Log, Output, Report } from "./outputs.js";
+import { Balance } from "./balance.js";
 import {
-  encodeFunctionData,
   getAddress,
-  Address,
-  decodeAbiParameters,
-  ByteArray,
-  hexToBytes,
-  bytesToHex,
-  parseAbiParameters,
-  hexToString,
   parseEther,
 } from "viem";
-import { CartesiDappABI, erc20ABI, erc721ABI } from "./rollups";
+// import { CartesiDappABI, erc20ABI, erc721ABI } from "./rollups.js";
 import { ethers } from "ethers";
 
 class Wallet {
@@ -198,25 +190,25 @@ class Wallet {
   //   }
   // };
 
-  ether_withdraw = (
-    rollup_address,
-    account,
-    amount
-  ) => {
-    try {
-      let balance = this._balance_get(account);
-      balance.ether_decrease(amount);
-      const call = encodeFunctionData({
-        abi: CartesiDappABI,
-        functionName: "withdrawEther",
-        args: [getAddress(account), amount],
-      });
-      return new Voucher(rollup_address, hexToBytes(call));
-    } catch (e) {
-      console.log(e);
-      return new Error_out(`error withdrawing ether ${e}`);
-    }
-  };
+  // ether_withdraw = (
+  //   rollup_address,
+  //   account,
+  //   amount
+  // ) => {
+  //   try {
+  //     let balance = this._balance_get(account);
+  //     balance.ether_decrease(amount);
+  //     const call = encodeFunctionData({
+  //       abi: CartesiDappABI,
+  //       functionName: "withdrawEther",
+  //       args: [getAddress(account), amount],
+  //     });
+  //     return new Voucher(rollup_address, hexToBytes(call));
+  //   } catch (e) {
+  //     console.log(e);
+  //     return new Error_out(`error withdrawing ether ${e}`);
+  //   }
+  // };
 
   // ether_transfer = (account: Address, to: Address, amount: bigint) => {
   //   try {
