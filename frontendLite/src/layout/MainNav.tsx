@@ -15,6 +15,9 @@ const MainNav = (props: Props) => {
             <Link to="/" className="btn btn-ghost">
               About Us
             </Link>
+            <Link to="/" className="btn btn-ghost">
+              Admin
+            </Link>
 
             <Link to="/" className="btn btn-ghost">
               Contact Us
