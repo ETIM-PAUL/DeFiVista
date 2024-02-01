@@ -12,6 +12,7 @@ const HomePage = () => {
        <HeroCard/> 
       
       </div>
+
       <div className="flex flex-1 items-start justify-center flex-col xl:px-0 sm:px-16 px-6">
         <h1 className="font-roboto font-semibold sm:text-[50px] text-[42px] text-[#080E26] sm:leading-[75px] leading-[55px] w-full">
           Embark on a Journey to build a Generational Wealth
@@ -36,9 +37,12 @@ const HomePage = () => {
         </div>
       </div>
 
+
     </section>
     <Footer/>
     </>
+
+     
   );
 };
 

@@ -4,6 +4,7 @@ import { dvicon, dvlogo } from "../assets";
 
 const MainNav = () => {
   return (
+
     <div className="navbar bg-white text-black mt-2">
       <div className="flex-1">
         <Link to="/" className=" btn-ghost">
@@ -22,6 +23,8 @@ const MainNav = () => {
             Contact Us
           </Link>
           <button className="btn btn-ghost font-semibold">Connect</button>
+
+   
         </div>
       </div>
     </div>
