@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { ethers } from "ethers";
+import { useNoticesQuery } from "../generated/graphql";
 import { Link } from "react-router-dom";
 import { allCompanyData } from "../constants";
 import { dvlogo } from "../assets";
@@ -6,87 +8,125 @@ import { dvlogo } from "../assets";
 
 type Props = {};
 
-const Companies = (props: Props) => {
+type Notice = {
+  id: string;
+  index: number;
+  input: any, //{index: number; epoch: {index: number; }
+  payload: string;
+};
+
+function hexToString(hex: any) {
+  // Remove the '0x' prefix
+  const strippedHexString = hex.slice(2);
+
+  // Convert the hex string to a buffer
+  const buffer = Buffer.from(strippedHexString, 'hex');
+
+  // Convert the buffer to a string
+  const resultString = buffer.toString('utf-8');
+  return resultString;
+}
+
+const Companies: React.FC = (props: Props) => {
+  const [showModal, setModal] = useState(false)
+
+  const [loading, setLoading] = useState<boolean>()
+  const [result, reexecuteQuery] = useNoticesQuery();
+  const { data, fetching, error } = result;
+
+
+  const notices: any = data && data.notices.edges.map((node: any) => {
+    const n = node.node;
+    let inputPayload = n?.input.payload;
+    if (inputPayload) {
+      try {
+        inputPayload = ethers.utils.toUtf8String(inputPayload);
+      } catch (e) {
+        inputPayload = inputPayload + " (hex)";
+      }
+    } else {
+      inputPayload = "(empty)";
+    }
+    let payload = n?.payload;
+    if (payload) {
+      try {
+        payload = ethers.utils.toUtf8String(payload);
+      } catch (e) {
+        payload = payload + " (hex)";
+      }
+    } else {
+      payload = "(empty)";
+    }
+    return {
+      // id: `${n?.id}`,
+      // index: parseInt(n?.index),
+      payload: JSON.parse(JSON.parse(JSON.stringify(JSON.parse(JSON.stringify((hexToString(JSON.parse(payload).createdCompany.payload))))))),
+      input: n ? { index: n.input.index, payload: inputPayload } : {},
+    };
+  }).sort((b: any, a: any) => {
+    if (a.input.index === b.input.index) {
+      return b.index - a.index;
+    } else {
+      return b.input.index - a.input.index;
+    }
+  });
+
   return (
-    <div className="bg-white">
-
-<div className="navbar bg-white text-black mt-2">
-        <div className="flex-1 ">
-          <a className="btn-ghost ">
-          <img src={dvlogo} alt="defivista" width={100} height={58} />
-          </a>
-        </div>
-        <div className="gap-8 mr-28">
-            <Link to="/my-company" className="btn btn-ghost">
-              My Company
-            </Link>
-
-            <Link to="/create-company" className="btn btn-ghost">
-              Add Company
-            </Link>
-
-            <Link to="/admin" className="btn btn-ghost">
-              Admin
-            </Link>
-          </div>
+    <div className="bg-white p-10 mt-20">
+      {/* CompaniesData */}
+      <div className="font-bold txt-black flex justify-between items-center">
+        <span>All Active Companies</span>
+        <label htmlFor="my_modal_6" onClick={() => setModal(true)} className="btn">Suggest Investment</label>
       </div>
 
-    
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-8">
+        {notices && notices.length > 0 && notices.map((item: any, index: number) => (
+          <div key={item} className="border rounded-md shadow-md">
+            <div
+              key={index}
+              className=" px-4 py-3 text-black"
+            >
+              <div className="flex flex-row items-center justify-between">
+                <img
+                  src={dvlogo}
+                  alt="Company-Logo"
+                  width={100} />
 
-      {/* CompaniesData */}
+                <div className="flex flex-col text-sm">
+                  <h2 className="font-medium text-md">{item?.payload?.companyName}</h2>
+                  <h2>{item?.payload?.regNum}</h2>
+                </div>
+              </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 bg-slate-400 gap-4">
-        {allCompanyData.map((companiesData) => (
-          <div
-            key={companiesData.id}
-            className=" px-4 py-3 border-2 rounded-xl shadow-md mt-10 mx-10 text-black"
-          >
-            <div className="flex flex-row items-center justify-between">
-              <img
-                src={companiesData.companyLogo}
-                alt="Company-Logo"
-                width={100}
-              />
-
-              <div className="flex flex-col ">
-                <h2 className="font-medium ">{companiesData.companyName}</h2>
-                <h2>{companiesData.regNum}</h2>
+              <div className="space-y-4 text-sm">
+                <p>Country: {item?.payload?.country} </p>
+                <p>Price Per Share: {item?.payload?.pricePerShare}ETH</p>
+                <p>Minimum Purchase Share: {item?.payload?.minShare}Shares </p>
               </div>
             </div>
-
-            <div className="space-y-4 text-lg">
-              <p>Country: {companiesData.country} </p>
-              <p>Price Per Share: {companiesData.pricePerShare}</p>
-              <p>Minimum Share: {companiesData.minShare} </p>
-            </div>
-
             <Link
-              to={`/company-details/${companiesData.id}`}
-              className="flex items-center justify-center btn btn-ghost text-lg font-bold mt-10 "
+              to={`/company-details/${item?.payload?.id}`}
+              className="flex items-center justify-center bg-black border-t rounded-b-md p-3 text-xs font-bold mt-1"
             >
               View More
-            </Link>
-          </div>
+            </Link></div>
         ))}
       </div>
+
+      {showModal &&
+        <><input type="checkbox" checked id="my_modal_6" className="modal-toggle" /><div className="modal" role="dialog">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">Welcome to our Shares AI!</h3>
+            <p className="py-4">This AI will take your bio data and will suggest companies that suits your profile for you to invest in!</p>
+            <div className="modal-action">
+              <label onClick={() => setModal(false)} htmlFor="my_modal_6 bg-" className="btn">Close!</label>
+              <button className="btn bg-white text-black hover:bg-white">Proceed!</button>
+            </div>
+          </div>
+        </div></>
+      }
     </div>
   );
 };
 
 export default Companies;
-
-//  {availableBounties &&
-//         availableBounties?.map((bountiesData: any) => (
-//           <div
-//             key={bountiesData.id}
-//             className=""
-//             onClick={() => handleBountyClick(bountiesData)}
-//           >
-//             <div className="border-[#1F1F1F] border flex mt-4 mx-6 relative">
-//               <div className="flex flex-row gap-4 p-6 w-full">
-//                 <Image
-//                   src={bountiesData.image ? "" : DummyImage}
-//                   alt="bountyImage"
-//                   width={200}
-//                   className=""
-//                 />
