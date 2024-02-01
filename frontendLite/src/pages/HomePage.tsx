@@ -2,9 +2,17 @@ import React from "react";
 import MainNav from "../layout/MainNav";
 import { Link } from "react-router-dom";
 import HeroCard from "../component/Herocard";
+import Footer from "../component/Footer";
 const HomePage = () => {
   return (
+    <>
     <section className="flex md:flex-row flex-col sm:py-16 py-6 sm-px-16 px-6 gap-16">
+      
+      <div className="flex-1 flex items-center justify-center md:my-0 my-10 relative">
+       <HeroCard/> 
+      
+      </div>
+
       <div className="flex flex-1 items-start justify-center flex-col xl:px-0 sm:px-16 px-6">
         <h1 className="font-roboto font-semibold sm:text-[50px] text-[42px] text-[#080E26] sm:leading-[75px] leading-[55px] w-full">
           Embark on a Journey to build a Generational Wealth
@@ -28,13 +36,13 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      <div className="flex-1 flex items-center justify-center md:my-0 my-10 relative">
-       <HeroCard/> 
-      </div>
-   
+
 
     </section>
-    
+    <Footer/>
+    </>
+
+     
   );
 };
 

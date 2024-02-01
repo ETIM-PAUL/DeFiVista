@@ -1,4 +1,4 @@
-import { brakeLogo, bungeLogo, marsLogo, nestleLogo } from "../assets";
+import { brakeLogo, bungeLogo, marsLogo,dvicon,dvlogo,facebook,instagram,twitter,linkedin, nestleLogo } from "../assets";
 
 export const allCompanyData = [
   {
@@ -8,7 +8,8 @@ export const allCompanyData = [
     regNum: "RC2013452",
     pricePerShare: "$100",
     minShare: "10",
-    country: "Ghana",
+    country: "Ghana", 
+    status: true,
     description:
       "WallStreet Liquid Capitals is a company registered in Ghana with branches across Africa. At WallStreet Liquid Capitals we are into digital assets evaluation, Management, Trading, Consultancy, and giving of grants and equity to small and medium business across Africa to grow. At the Heart of what we do at WallStreet Liquid Capitals is Financial inclusion and easy access of Capitals to the Small and medium business, thereby 'Banking the Unbanked'. Our Current Market Capitalization is 2 Billion ",
   },
@@ -21,7 +22,7 @@ export const allCompanyData = [
     pricePerShare: "$100",
     minShare: "10",
     country: "Nigeria",
-
+    status: true,
     description:
       "WallStreet Liquid Capitals is a company registered in Nigeria with branches across Africa. At WallStreet Liquid Capitals we are into digital assets evaluation, Management, Trading, Consultancy, and giving of grants and equity to small and medium business across Africa to grow. At the Heart of what we do at WallStreet Liquid Capitals is Financial inclusion and easy access of Capitals to the Small and medium business, thereby 'Banking the Unbanked'. Our Current Market Capitalization is 2 Billion ",
   },
@@ -34,6 +35,7 @@ export const allCompanyData = [
     pricePerShare: "$100",
     minShare: "10",
     country: "Kenya",
+    status: true,
     description:
       "WallStreet Liquid Capitals is a company registered in Ghana with branches across Africa. At WallStreet Liquid Capitals we are into digital assets evaluation, Management, Trading, Consultancy, and giving of grants and equity to small and medium business across Africa to grow. At the Heart of what we do at WallStreet Liquid Capitals is Financial inclusion and easy access of Capitals to the Small and medium business, thereby 'Banking the Unbanked'. Our Current Market Capitalization is 2 Billion ",
   },
@@ -46,6 +48,7 @@ export const allCompanyData = [
     pricePerShare: "$100",
     minShare: "10",
     country: "Rwanda",
+    status: true,
     description:
       "WallStreet Liquid Capitals is a company registered in Ghana with branches across Africa. At WallStreet Liquid Capitals we are into digital assets evaluation, Management, Trading, Consultancy, and giving of grants and equity to small and medium business across Africa to grow. At the Heart of what we do at WallStreet Liquid Capitals is Financial inclusion and easy access of Capitals to the Small and medium business, thereby 'Banking the Unbanked'. Our Current Market Capitalization is 2 Billion ",
   },
@@ -57,7 +60,8 @@ export const allCompanyData = [
     regNum: "RC2013456",
     pricePerShare: "$100",
     minShare: "10",
-    country: "Ghana",
+    country: "Ghana", 
+    status: true,
     description:
       "WallStreet Liquid Capitals is a company registered in Ghana with branches across Africa. At WallStreet Liquid Capitals we are into digital assets evaluation, Management, Trading, Consultancy, and giving of grants and equity to small and medium business across Africa to grow. At the Heart of what we do at WallStreet Liquid Capitals is Financial inclusion and easy access of Capitals to the Small and medium business, thereby 'Banking the Unbanked'. Our Current Market Capitalization is 2 Billion ",
   },
@@ -70,6 +74,7 @@ export const allCompanyData = [
     pricePerShare: "$100",
     minShare: "10",
     country: "Nigeria",
+    status: true,
     description:
       "WallStreet Liquid Capitals is a company registered in Ghana with branches across Africa. At WallStreet Liquid Capitals we are into digital assets evaluation, Management, Trading, Consultancy, and giving of grants and equity to small and medium business across Africa to grow. At the Heart of what we do at WallStreet Liquid Capitals is Financial inclusion and easy access of Capitals to the Small and medium business, thereby 'Banking the Unbanked'. Our Current Market Capitalization is 2 Billion ",
   },
@@ -82,6 +87,7 @@ export const allCompanyData = [
     pricePerShare: "$100",
     minShare: "10",
     country: "Kenya",
+    status: false,
     description:
       "WallStreet Liquid Capitals is a company registered in Ghana with branches across Africa. At WallStreet Liquid Capitals we are into digital assets evaluation, Management, Trading, Consultancy, and giving of grants and equity to small and medium business across Africa to grow. At the Heart of what we do at WallStreet Liquid Capitals is Financial inclusion and easy access of Capitals to the Small and medium business, thereby 'Banking the Unbanked'. Our Current Market Capitalization is 2 Billion ",
   },
@@ -94,9 +100,54 @@ export const allCompanyData = [
     pricePerShare: "$100",
     minShare: "10",
     country: "Rwanda",
+    status: true,
     description:
       "WallStreet Liquid Capitals is a company registered in Ghana with branches across Africa. At WallStreet Liquid Capitals we are into digital assets evaluation, Management, Trading, Consultancy, and giving of grants and equity to small and medium business across Africa to grow. At the Heart of what we do at WallStreet Liquid Capitals is Financial inclusion and easy access of Capitals to the Small and medium business, thereby 'Banking the Unbanked'. Our Current Market Capitalization is 2 Billion ",
-  },
+  }, {
+    id: "9",
+    companyLogo: brakeLogo,
+    companyName: "WallStreet Liquid Capitals",
+    regNum: "RC2013452",
+    pricePerShare: "$100",
+    minShare: "10",
+    country: "Ghana",
+    status: false,
+    description:
+      "WallStreet Liquid Capitals is a company registered in Ghana with branches across Africa. At WallStreet Liquid Capitals we are into digital assets evaluation, Management, Trading, Consultancy, and giving of grants and equity to small and medium business across Africa to grow. At the Heart of what we do at WallStreet Liquid Capitals is Financial inclusion and easy access of Capitals to the Small and medium business, thereby 'Banking the Unbanked'. Our Current Market Capitalization is 2 Billion ",
+  }, {
+    id: "10",
+    companyLogo: brakeLogo,
+    companyName: "WallStreet Liquid Capitals",
+    regNum: "RC2013452",
+    pricePerShare: "$100",
+    minShare: "10",
+    country: "Ghana", 
+    status: true,
+    description:
+      "WallStreet Liquid Capitals is a company registered in Ghana with branches across Africa. At WallStreet Liquid Capitals we are into digital assets evaluation, Management, Trading, Consultancy, and giving of grants and equity to small and medium business across Africa to grow. At the Heart of what we do at WallStreet Liquid Capitals is Financial inclusion and easy access of Capitals to the Small and medium business, thereby 'Banking the Unbanked'. Our Current Market Capitalization is 2 Billion ",
+  }, {
+    id: "11",
+    companyLogo: brakeLogo,
+    companyName: "WallStreet Liquid Capitals",
+    regNum: "RC2013452",
+    pricePerShare: "$100",
+    minShare: "10",
+    country: "Ghana",
+    status: true,
+    description:
+      "WallStreet Liquid Capitals is a company registered in Ghana with branches across Africa. At WallStreet Liquid Capitals we are into digital assets evaluation, Management, Trading, Consultancy, and giving of grants and equity to small and medium business across Africa to grow. At the Heart of what we do at WallStreet Liquid Capitals is Financial inclusion and easy access of Capitals to the Small and medium business, thereby 'Banking the Unbanked'. Our Current Market Capitalization is 2 Billion ",
+  }, {
+    id: "12",
+    companyLogo: brakeLogo,
+    companyName: "WallStreet Liquid Capitals",
+    regNum: "RC2013452",
+    pricePerShare: "$100",
+    minShare: "10",
+    country: "Ghana", 
+    status: false,
+    description:
+      "WallStreet Liquid Capitals is a company registered in Ghana with branches across Africa. At WallStreet Liquid Capitals we are into digital assets evaluation, Management, Trading, Consultancy, and giving of grants and equity to small and medium business across Africa to grow. At the Heart of what we do at WallStreet Liquid Capitals is Financial inclusion and easy access of Capitals to the Small and medium business, thereby 'Banking the Unbanked'. Our Current Market Capitalization is 2 Billion ",
+  }
 ];
 
 export const shareHoldersStats = [
@@ -155,7 +206,7 @@ export const myCompanyData = [
     companyLogo: brakeLogo,
     companyName: "WallStreet Capitals",
     regNum: "RC2013452",
-    country: "Ghana",
+    country: "Ghana", status: true,
     totalShares: "$200",
   },
 
@@ -205,5 +256,93 @@ export const myCompanyData = [
     regNum: "RC2013454",
     country: "Nigeria",
     totalShares: "$100",
+  },
+];
+export const footerLinks = [
+  {
+    title: "Useful Links",
+    links: [
+      {
+        name: "Admin",
+        link: "./admin",
+      },
+      {
+        name: "Top gainers",
+        link: "#defivista",
+      },
+      {
+        name: "How it Works",
+        link: "#defivista",
+      },
+      {
+        name: "Explore",
+        link: "#defivista",
+      },
+      {
+        name: "Terms & Services",
+        link: "#defivista",
+      },
+    ],
+  },
+  {
+    title: "Community",
+    links: [
+      {
+        name: "Help Center",
+        link: "#defivista",
+      },
+      {
+        name: "Partners",
+        link: "#defivista",
+      },
+      {
+        name: "Suggestions",
+        link: "#defivista",
+      },
+      {
+        name: "Blog",
+        link: "#defivista",
+      },
+      {
+        name: "Newsletters",
+        link: "#defivista",
+      },
+    ],
+  },
+  {
+    title: "Partner",
+    links: [
+      {
+        name: "Our Partner",
+        link: "#defivista",
+      },
+      {
+        name: "Become a Partner",
+        link: "#defivista",
+      },
+    ],
+  },
+];
+
+export const socialMedia = [
+  {
+    id: "social-media-1",
+    icon: instagram,
+    link: "https://www.instagram.com/",
+  },
+  {
+    id: "social-media-2",
+    icon: facebook,
+    link: "https://facebook.com/",
+  },
+  {
+    id: "social-media-3",
+    icon: twitter,
+    link: "https://twitter.com/",
+  },
+  {
+    id: "social-media-4",
+    icon: linkedin,
+    link: "https://www.linkedin.com/in/",
   },
 ];

@@ -5,5 +5,8 @@ import bungeLogo from "./BungeLogo.svg";
 import herobg from "./herobg.jpg"
 import dvlogo from "./dvlogo.png"
 import dvicon from "./dvicon.png"
-
-export { brakeLogo, marsLogo, nestleLogo, bungeLogo, herobg, dvlogo, dvicon };
+import twitter from './twitter.svg'
+import facebook from './facebook.svg'
+import linkedin from './linkedin.svg'
+import instagram from './instagram.svg'
+export { brakeLogo, marsLogo, nestleLogo, bungeLogo, herobg, dvlogo, dvicon,facebook,linkedin,twitter,instagram };
