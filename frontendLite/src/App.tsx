@@ -41,7 +41,7 @@ const App: FC = () => {
   );
 
   return (
-    <div className="bg-slate-300 h-screen">
+    <div className="">
       <MainNav />
 
       <HomePage />

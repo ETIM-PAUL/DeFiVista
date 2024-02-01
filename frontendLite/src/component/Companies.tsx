@@ -1,15 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { allCompanyData } from "../constants";
+import Logo from "./Logo";
 
 type Props = {};
 
 const Companies = (props: Props) => {
   return (
-    <div className="">
+    <div className="bg-white">
       <div className="navbar bg-base-100 mt-2">
         <div className="flex-1">
-          <a className="btn btn-ghost text-2xl font-bold">DeFiVista</a>
+          <Logo />
         </div>
         <div className="flex-none gap-8">
           <div className="gap-8 mr-28">
@@ -56,6 +57,13 @@ const Companies = (props: Props) => {
               <p>Price Per Share: {companiesData.pricePerShare}</p>
               <p>Minimum Share: {companiesData.minShare} </p>
             </div>
+
+            <Link
+              to={`/company-details/${companiesData.id}`}
+              className="flex items-center justify-center btn btn-ghost text-lg font-bold mt-10 "
+            >
+              View More
+            </Link>
           </div>
         ))}
       </div>

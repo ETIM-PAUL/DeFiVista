@@ -22,6 +22,7 @@ import CompanyPage from "./pages/CompanyPage";
 import MyCompanyPage from "./pages/MyCompanyPage";
 import AdminPage from "./pages/AdminPage";
 import CreateCompanyPage from "./pages/CreateCompanyPage";
+import CompanyDetailsPage from "./pages/CompanyDetailsPage";
 const container = document.getElementById("root");
 const root = createRoot(container!); // createRoot(container!) if you use TypeScript
 
@@ -49,6 +50,11 @@ const router = createBrowserRouter([
   {
     path: "/create-company",
     element: <CreateCompanyPage />,
+  },
+
+  {
+    path: "/company-details/:id",
+    element: <CompanyDetailsPage />,
   },
 
   {
