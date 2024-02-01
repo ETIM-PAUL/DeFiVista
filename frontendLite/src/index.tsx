@@ -18,6 +18,11 @@ import "./index.css";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Contact from "./pages/contact";
+import CompanyPage from "./pages/CompanyPage";
+import MyCompanyPage from "./pages/MyCompanyPage";
+import AdminPage from "./pages/AdminPage";
+import CreateCompanyPage from "./pages/CreateCompanyPage";
+import CompanyDetailsPage from "./pages/CompanyDetailsPage";
 const container = document.getElementById("root");
 const root = createRoot(container!); // createRoot(container!) if you use TypeScript
 
@@ -26,6 +31,32 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
   },
+
+  {
+    path: "/companies",
+    element: <CompanyPage />,
+  },
+
+  {
+    path: "/my-company",
+    element: <MyCompanyPage />,
+  },
+
+  {
+    path: "/admin",
+    element: <AdminPage />,
+  },
+
+  {
+    path: "/create-company",
+    element: <CreateCompanyPage />,
+  },
+
+  {
+    path: "/company-details/:id",
+    element: <CompanyDetailsPage />,
+  },
+
   {
     path: "/contact",
     element: <Contact />,
@@ -33,11 +64,9 @@ const router = createBrowserRouter([
 ]);
 
 root.render(
-  // <BrowserRouter>
   <React.StrictMode>
     <RouterProvider router={router} />
   </React.StrictMode>
-  // </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -11,6 +11,9 @@ import { Network } from "./Network";
 import { Vouchers } from "./Vouchers";
 import { Reports } from "./Reports";
 import configFile from "./config.json";
+import HomePage from "./pages/HomePage";
+import MainNav from "./layout/MainNav";
+import CompanyPage from "./pages/CompanyPage";
 
 const config: any = configFile;
 
@@ -39,19 +42,18 @@ const App: FC = () => {
   );
 
   return (
-    <div className="bg-white">
-      <span className="text-red-500 font-bold text-5xl">jjj</span>
+    <div className="">
+      <MainNav />
+
+      <HomePage />
+
       {/* <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="products" element={<ProductsPage />} />
-        <Route path="about-us" element={<AboutPage />} />
-        <Route path="contact-us" element={<ContactPage />} />
-      </Routes> */}
+
 
       {/*  */}
       {/* <Network /> */}
-      {/* <GraphQLProvider>
+      <GraphQLProvider>
+        <CompanyPage />
         <div>
           Dapp Address:{" "}
           <input
@@ -63,17 +65,16 @@ const App: FC = () => {
           <br />
         </div>
 
-        <h4 className="text-blue-700 font-semibold">Mars</h4>
 
-        <h2>Input</h2>
+        {/* <h2>Input</h2>
         <Input dappAddress={dappAddress} />
         <h2>Reports</h2>
         <Reports />
         <h2>Notices</h2>
         <Notices />
         <h2>Vouchers</h2>
-        <Vouchers dappAddress={dappAddress} />
-      </GraphQLProvider> */}
+        <Vouchers dappAddress={dappAddress} /> */}
+      </GraphQLProvider>
     </div>
   );
 };
