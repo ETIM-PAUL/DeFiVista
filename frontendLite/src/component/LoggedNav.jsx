@@ -26,9 +26,19 @@ const LoggedNav = () => {
           Admin
         </Link>
 
-        <button className="btn btn-ghost font-semibold bg-black hover:bg-black text-white" onClick={() => disconnect(wallet)}>
-          Disconnect Wallet
+        {!wallet ? <button
+          className="btn btn-ghost mr-10 font-semibold bg-black hover:bg-black text-white"
+          onClick={() =>
+            connect()
+          }
+        >
+          {connecting ? "Connecting..." : "Connect Wallet"}
         </button>
+          :
+          <button className="btn btn-ghost mr-10 font-semibold bg-black hover:bg-black text-white" onClick={() => disconnect(wallet)}>
+            Disconnect Wallet
+          </button>
+        }
       </div>
     </div>
   )
