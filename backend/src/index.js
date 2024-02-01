@@ -43,7 +43,7 @@ async function handle_advance(data) {
   let advance_req;
 
   try {
-    //{"method":"company_create","name":"web3Bridge","description":"a web3 leading company","companyLogo":"X7sdsa8ycn","pricePerShare":"0.01","minShare":"3","country":"Nigeria","regNum":"8726252"}
+    //{"method":"company_create","name":"web3Bridge","description":"a web3 leading company","companyLogo":"X7sdsa8ycn","pricePerShare":"0.01","minShare":"3","country":"Nigeria","state":"lagos","regNum":"8726252"}
     if (JSONpayload.method === "company_create") {
       console.log("creating company....");
       const createdCompany = company_create(
@@ -54,6 +54,7 @@ async function handle_advance(data) {
         JSONpayload.pricePerShare,
         JSONpayload.minShare,
         JSONpayload.country,
+        JSONpayload.state,
         JSONpayload.regNum
       );
       console.log("created company is:", createdCompany);
@@ -70,7 +71,7 @@ async function handle_advance(data) {
         body: JSON.stringify({ payload: hexresult }),
       });
 
-      //{"method":"update_company_status", "company": "1","new_status":"1"}
+      //{"method":"update_company_status", "company_id":1,"new_status":1}
     } else if (JSONpayload.method === "update_company_status") {
       let updatedCompanyStatus = update_company_status(
         JSONpayload.company_id,
@@ -90,6 +91,16 @@ async function handle_advance(data) {
       );
       console.log("buying company status....");
       console.log("shares bought: " + JSON.stringify(sharesAcquisition));
+      // convert result to hex
+      const hexresult = stringToHex(sharesAcquisition);
+      console.log("The result is :", hexresult);
+      advance_req = await fetch(rollup_server + "/notice", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ payload: hexresult }),
+      });
     }
     //{"method":"shares_withdraw", "msg_sender":"your address","company": "1"}
     else if (JSONpayload.method === "shares_withdraw") {
@@ -99,8 +110,18 @@ async function handle_advance(data) {
       );
       console.log("withdrawing company status....");
       console.log("shares withdrawn: " + JSON.stringify(sharesWithdrawal));
+      // convert result to hex
+      const hexresult = stringToHex(sharesWithdrawal);
+      console.log("The result is :", hexresult);
+      advance_req = await fetch(rollup_server + "/notice", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ payload: hexresult }),
+      });
     }
-    //{"method":"company_get", "company": "1"}
+    //{"method":"company_get", "company_id":1}
     else if (JSONpayload.method === "company_get") {
       let companyDetails = company_get(JSONpayload.company_id);
       console.log("getting company details....");
@@ -118,7 +139,7 @@ async function handle_advance(data) {
     }
     //{"method":"companies_get_admin"}
     else if (JSONpayload.method === "companies_get_admin") {
-      let allCompanies = companies_get_admin();
+      let allCompanies = companies_get_admin(data.metadata.msg_sender);
       console.log("getting all company....");
       console.log("companies in the dapp: " + JSON.stringify(allCompanies));
     }
@@ -152,10 +173,10 @@ async function handle_advance(data) {
     });
     return "reject";
   }
-  const json = await advance_req.json();
+  const json = await advance_req?.json();
   console.log(
     "Received  status " +
-    advance_req.status +
+    advance_req?.status +
     " with body " +
     JSON.stringify(json)
   );

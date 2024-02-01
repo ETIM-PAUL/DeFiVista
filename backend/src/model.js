@@ -6,9 +6,10 @@ class CompanyShares {
   companyAdminAddress;
   companyLogo;
   totalShares;
-  minShare;
   pricePerShare;
+  minShare;
   country;
+  state;
   regNum;
   status;
   // static curr_id: number = 0;
@@ -18,9 +19,10 @@ class CompanyShares {
     description,
     companyAdminAddress,
     companyLogo,
-    minShare,
     pricePerShare,
+    minShare,
     country,
+    state,
     regNum
   ) {
     this.status = 0;
@@ -37,6 +39,7 @@ class CompanyShares {
     this.minShare = minShare;
     this.pricePerShare = pricePerShare;
     this.country = country;
+    this.state = state;
     this.regNum = regNum;
     this.shareHolders = [];
   }
@@ -60,6 +63,12 @@ class CompanyShares {
   }
   getPriceShare() {
     return this.pricePerShare;
+  }
+  getCountry() {
+    return this.country;
+  }
+  getState() {
+    return this.state;
   }
   getStatus() {
     return this.status;

@@ -19,25 +19,6 @@ const CompanyDetails = () => {
   // Display the company's details
   return (
     <div className="bg-white">
-      <div className="navbar bg-base-100 mt-2">
-        <div className="flex-1">
-          <Logo />
-        </div>
-
-        <div className="flex-none gap-8">
-          <div className="gap-8 mr-28">
-            <Link to="/companies" className="btn btn-ghost">
-              All Company
-            </Link>
-
-            <Link to="/my-company" className="btn btn-ghost">
-              My Company
-            </Link>
-          </div>
-
-          {/* <button className="btn btn-ghost mr-10 font-semibold">Connect</button> */}
-        </div>
-      </div>
 
       <div className="flex flex-row justify-between items-center mx-20 text-xl text-black  font-semibold">
         <img

@@ -22,7 +22,7 @@ type Notice = {
 };
 
 export const Notices: React.FC = () => {
-    const [result,reexecuteQuery] = useNoticesQuery();
+    const [result, reexecuteQuery] = useNoticesQuery();
     const { data, fetching, error } = result;
 
     if (fetching) return <p>Loading...</p>;
@@ -55,8 +55,8 @@ export const Notices: React.FC = () => {
         return {
             id: `${n?.id}`,
             index: parseInt(n?.index),
-            payload: `${payload}`,
-            input: n ? {index:n.input.index,payload: inputPayload} : {},
+            payload: payload,
+            input: n ? { index: n.input.index, payload: inputPayload } : {},
         };
     }).sort((b: any, a: any) => {
         if (a.input.index === b.input.index) {

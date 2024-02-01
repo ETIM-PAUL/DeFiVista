@@ -16,6 +16,7 @@ function company_create(
   pricePerShare,
   minShare,
   country,
+  state,
   regNum,
 ) {
   try {
@@ -27,6 +28,7 @@ function company_create(
       pricePerShare,
       minShare,
       country,
+      state,
       regNum)) {
       throw new EvalError(
         `company profile not completed`
@@ -35,17 +37,18 @@ function company_create(
 
     let company = new CompanyShares(
       companyName,
+      description,
       companyAdminAddress,
       companyLogo,
-      description,
-      minShare,
       pricePerShare,
+      minShare,
       country,
+      state,
       regNum
     );
     companies.set(company.id, company);
     let company_json = JSON.stringify(company);
-    const notice_payload = `{{"type":"company_create","content":${company_json}}}`;
+    const notice_payload = `${company_json}`;
     console.log(
       `Company ${company.id} created for buying and selling of shares, awaiting admin's approval`
     );
@@ -88,8 +91,8 @@ function update_company_status(
       console.log('Updated Map:', companies);
     }
 
-    let company_json = JSON.stringify(company);
-    const notice_payload = `{{"type":"update_company_status","content":${company_json}}}`;
+    let company = companies.get(company_id);
+    const notice_payload = `{{"type":"update_company_status","content":${JSON.stringify(company)}}}`;
     console.log(
       `Company ${company.id} status updated`
     );
@@ -231,7 +234,8 @@ function company_get(company_id) {
         `company doesn't exist`
       );
     }
-    return new Log(JSON.stringify(company_json));
+    let company_json = companies.get(company_id);
+    return company_json;
   } catch (e) {
     return new Error_out(`Company id ${company_id} not found`);
   }
@@ -246,7 +250,7 @@ function company_shareholders(company_id) {
         `company doesn't exist`
       );
     }
-    return new Log(JSON.stringify(company.shareHolders));
+    return company.shareHolders;
   } catch (e) {
     let error_msg = `failed to list shareHolders for company id ${company_id} ${e}`;
     console.debug(error_msg);
@@ -262,16 +266,10 @@ function companies_get_admin() {
     );
   }
   let companies_json = JSON.stringify(companies);
-  return new Log(companies_json);
+  return companies_json;
 }
 
 function get_companies() {
-  if (!isDappAdminAction(
-    msg_sender)) {
-    throw new EvalError(
-      `not DeFiVista admin`
-    );
-  }
   // Filter objects in the map based on a condition
   const filteredObjects = Array.from(companies).filter(([key, value]) => {
     // Replace the condition with your own filtering logic
@@ -281,7 +279,7 @@ function get_companies() {
   // Create a new Map from the filtered array
   const filteredMap = new Map(filteredObjects);
   let companies_json = JSON.stringify(filteredMap);
-  return new Log(companies_json);
+  return companies_json;
 }
 
 function get_user_shares(msg_sender) {
@@ -331,8 +329,9 @@ function is_company_complete(
   pricePerShare,
   minShare,
   country,
+  state,
   regNum) {
-  if (!companyName, !description, !companyAdminAddress, !companyLogo, !pricePerShare, !minShare, !country, !regNum) {
+  if (!companyName, !description, !companyAdminAddress, !companyLogo, !pricePerShare, !minShare, !country, !state, !regNum) {
     return false
   } else {
     return true;
