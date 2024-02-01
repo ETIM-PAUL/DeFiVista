@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Logo from "./Logo";
+import { dvlogo } from "../assets";
+
 
 type Props = {};
 
@@ -18,12 +19,14 @@ const CreateCompany = (props: Props) => {
 
   return (
     <>
-      <div className="navbar bg-base-100 mt-2">
-        <div className="flex-1">
-          <Logo />
-        </div>
-        <div className="flex-none gap-8">
-          <div className="gap-8 mr-28">
+      <div className="navbar bg-white text-black mt-2">
+      <div className="flex-1">
+        <Link to="/" className=" btn-ghost">
+          <img src={dvlogo} alt="defivista" width={100} height={58} />
+        </Link>
+      </div>
+      <div className="flex-none gap-2">
+      <div className="gap-8 mr-28">
             <Link to="/my-company" className="btn btn-ghost">
               My Company
             </Link>
@@ -32,13 +35,15 @@ const CreateCompany = (props: Props) => {
               Admin
             </Link>
           </div>
-        </div>
       </div>
+    </div>
+         
+      
 
       <form
         action=""
         onSubmit={formSubmitHandler}
-        className="flex flex-col items-center mx-auto justify-center py-10"
+        className="flex flex-col items-center mx-auto bg-slate-300 justify-center py-10"
       >
         <div className="space-y-6">
           <div className="flex flex-row  gap-14   ">

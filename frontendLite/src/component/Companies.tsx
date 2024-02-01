@@ -1,19 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { allCompanyData } from "../constants";
-import Logo from "./Logo";
+import { dvlogo } from "../assets";
+
 
 type Props = {};
 
 const Companies = (props: Props) => {
   return (
     <div className="bg-white">
-      <div className="navbar bg-base-100 mt-2">
-        <div className="flex-1">
-          <Logo />
+
+<div className="navbar bg-white text-black mt-2">
+        <div className="flex-1 ">
+          <a className="btn-ghost ">
+          <img src={dvlogo} alt="defivista" width={100} height={58} />
+          </a>
         </div>
-        <div className="flex-none gap-8">
-          <div className="gap-8 mr-28">
+        <div className="gap-8 mr-28">
             <Link to="/my-company" className="btn btn-ghost">
               My Company
             </Link>
@@ -26,14 +29,13 @@ const Companies = (props: Props) => {
               Admin
             </Link>
           </div>
-
-          {/* <button className="btn btn-ghost mr-10 font-semibold">Connect</button> */}
-        </div>
       </div>
+
+    
 
       {/* CompaniesData */}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 bg-slate-400 gap-4">
         {allCompanyData.map((companiesData) => (
           <div
             key={companiesData.id}
