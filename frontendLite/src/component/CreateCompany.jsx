@@ -73,7 +73,7 @@ const CreateCompany = (prop) => {
           data: formData,
           headers: pinataConfig.headers
         })
-        updateFileUrl(`ipfs://${response.data.IpfsHash}/`)
+        updateFileUrl(`ipfs/${response.data.IpfsHash}/`)
         setIpfsUpload(`ipfs://${response.data.IpfsHash}/`)
         queryPinataFiles();
       } else {
@@ -123,7 +123,7 @@ const CreateCompany = (prop) => {
     try {
       if (rollups) {
         try {
-          let str = `{"method":"company_create","name":"${data?.name}","description":"${data?.description}","companyLogo":"${data?.fileUrl}","pricePerShare":"${data?.pricePerShare}","minShare":"${data?.minShare}","country":"${data?.country}","state":"${data?.state}","regNum":"${data.regNum}"}`
+          let str = `{"method":"company_create","name":"${data?.name}","description":"${data?.description}","companyLogo":"${fileUrl}","pricePerShare":"${data?.pricePerShare}","minShare":"${data?.minShare}","country":"${data?.country}","state":"${data?.state}","regNum":"${data.regNum}"}`
           let payload = ethers.utils.toUtf8Bytes(str);
 
           const result = await rollups.inputContract.addInput("0x70ac08179605AF2D9e75782b8DEcDD3c22aA4D0C", payload);
@@ -134,7 +134,7 @@ const CreateCompany = (prop) => {
           const event = receipt.events?.find((e) => e.event === "InputAdded");
           setIsSubmitLoading(true)
           toast("Company Created, Awaiting Admin Approval");
-
+          navigate("/")
         } catch (e) {
           console.log(`${e}`);
         }
@@ -265,7 +265,7 @@ const CreateCompany = (prop) => {
             <div className="grid space-y-2 w-full mt-4">
               <label>Uploaded Logo Link</label>
               <input
-                value={fileUrl}
+                value={ipfsUpload}
                 disabled
                 type="text"
                 className="input input-bordered text-black  border-[#696969] w-full max-w-full bg-white disabled:bg-white"

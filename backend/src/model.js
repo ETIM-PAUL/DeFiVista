@@ -82,18 +82,18 @@ class CompanyShares {
 
   acquisition(acquisition) {
     if (acquisition.company_id != this.id) {
-      throw new EvalError(`Company id ${acquisition.company_id} does not match`);
+      return new EvalError(`Company id ${acquisition.company_id} does not match`);
     }
     if (this.status == 0) {
-      throw new EvalError("This company isn't active");
+      return new EvalError("This company isn't active");
     }
-    if (acquisition.amount_of_shares < this.minShare) {
+    if (Number(acquisition.amount_of_shares) < Number(this.minShare)) {
       throw new EvalError(
         `Acquisition shares ${acquisition.minShare} did not not meet minimum shares`
       );
     }
-    if (acquisition.amount < (this.pricePerShare * acquisition.amount_of_shares)) {
-      throw new EvalError(
+    if (Number(acquisition.amount) < (Number(this.pricePerShare) * Number(acquisition.amount_of_shares))) {
+      return new EvalError(
         `Acquisition amount ${acquisition.amount} did not not meet total price`
       );
     }
@@ -112,10 +112,10 @@ class CompanyShares {
 
   acquisition_withdraw(msg_sender, company_id, amount) {
     if (company_id != this.id) {
-      throw new EvalError(`Company id ${company_id} does not match`);
+      return new EvalError(`Company id ${company_id} does not match`);
     }
     if (this.status == 0) {
-      throw new EvalError("This company isn't active");
+      return new EvalError("This company isn't active");
     }
 
     // Check if an object with the given name already exists
@@ -124,16 +124,14 @@ class CompanyShares {
     if (existingObjectIndex !== -1) {
       if (this.shareHolders[existingObjectIndex].amount_of_shares < amount) {
         // If the object doesn't exist, add a new object
-        throw new EvalError("Insufficient shares amount");
+        return new EvalError("Insufficient shares amount");
       }
       // If the object exists, update the amount
       this.shareHolders[existingObjectIndex].amount_of_shares -= amount;
     } else {
       // If the object doesn't exist, add a new object
-      throw new EvalError("No shares in this company");
+      return new EvalError("No shares in this company");
     }
-
-    this.shareHolders.push(acquisition);
   }
 }
 

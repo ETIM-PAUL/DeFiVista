@@ -92,7 +92,8 @@ function update_company_status(
     }
 
     let company = companies.get(company_id);
-    const notice_payload = `{{"type":"update_company_status","content":${JSON.stringify(company)}}}`;
+    let company_json = JSON.stringify(company);
+    const notice_payload = `${company_json}`;
     console.log(
       `Company ${company.id} status updated`
     );
@@ -124,7 +125,7 @@ function shares_purchase(
       );
     }
     const company = companies.get(company_id);
-    if (share_holder === company.companyAdminAddress) {
+    if (msg_sender === company.companyAdminAddress) {
       throw new EvalError(`${msg_sender} cannot buy shares in their own company`);
     }
     // if (amount <= 0) {
@@ -157,11 +158,9 @@ function shares_purchase(
       companies.set(keyToUpdate, updatedObject);
       console.log('Company Shares price updated:', companies);
     }
-
-
-    const shares_json = JSON.stringify({ share_holder, company_id, amount_of_shares, amount });
-    console.log(`Shares Acquisition worth ${amount} gotten for ${company_id}`);
-    return new Notice(`{{"type":"shares_purchase","content":${shares_json}}}`);
+    let company_json = JSON.stringify(company);
+    const notice_payload = `${company_json}`
+    return new Notice(notice_payload);
   } catch (e) {
     const error_msg = `failed to acquire shares ${e}`;
     console.debug(error_msg);
@@ -182,12 +181,11 @@ function shares_withdraw(
       );
     }
     const company = companies.get(company_id);
-    if (share_holder === company.companyAdminAddress) {
-      throw new EvalError(`${msg_sender} cannot withdraw shares in your own company`);
+    if (msg_sender === company.companyAdminAddress) {
+      return new EvalError(`${msg_sender} cannot withdraw shares in your own company`);
     }
     if (amount_of_shares <= 0) {
-      throw new EvalError(`Amount ${amount} must be greater than zero`);
-      return;
+      return new EvalError(`Amount ${amount} must be greater than zero`);
     }
     // if (!this.has_enough_funds(msg_sender, amount)) {
     //   throw new EvalError(`Account ${msg_sender} doesn't have enough funds`);
@@ -214,11 +212,9 @@ function shares_withdraw(
       companies.set(keyToUpdate, updatedObject);
       console.log('Company Shares price updated:', companies);
     }
-
-
-    const shares_json = JSON.stringify({ share_holder, company_id, amount_of_shares, amount });
-    console.log(`Shares Acquisition worth ${amount} withdraw for ${company_id}`);
-    return new Notice(`{{"type":"shares_withdraw","content":${shares_json}}}`);
+    let company_json = JSON.stringify(company);
+    const notice_payload = `${company_json}`
+    return new Notice(notice_payload);
   } catch (e) {
     const error_msg = `failed to withdraw shares ${e}`;
     console.debug(error_msg);

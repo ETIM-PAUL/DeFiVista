@@ -7,6 +7,7 @@ type Props = {
 };
 
 const ShareHolderStats = ({ shareHolders }: Props) => {
+  console.log(shareHolders)
   return (
     <div className="flex flex-col mx-24 mt-20 mb-20">
 

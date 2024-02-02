@@ -59,10 +59,9 @@ async function handle_advance(data) {
       );
       console.log("created company is:", createdCompany);
 
-      const result = JSON.stringify({ createdCompany: createdCompany });
+      const result = JSON.stringify(createdCompany);
       // convert result to hex
       const hexresult = stringToHex(result);
-      console.log("The result is :", hexresult);
       advance_req = await fetch(rollup_server + "/notice", {
         method: "POST",
         headers: {
@@ -80,6 +79,18 @@ async function handle_advance(data) {
       );
       console.log("updating company status....");
       console.log("updated company: " + JSON.stringify(updatedCompanyStatus));
+      if (updatedCompanyStatus.type === "notice") {
+        const result = JSON.stringify(updatedCompanyStatus);
+        // convert result to hex
+        const hexresult = stringToHex(result);
+        advance_req = await fetch(rollup_server + "/notice", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ payload: hexresult }),
+        });
+      }
 
       //{"method":"shares_purchase", "company": "1","new_status":"1"}
     } else if (JSONpayload.method === "shares_purchase") {
@@ -91,16 +102,18 @@ async function handle_advance(data) {
       );
       console.log("buying company status....");
       console.log("shares bought: " + JSON.stringify(sharesAcquisition));
-      // convert result to hex
-      const hexresult = stringToHex(sharesAcquisition);
-      console.log("The result is :", hexresult);
-      advance_req = await fetch(rollup_server + "/notice", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ payload: hexresult }),
-      });
+      if (sharesAcquisition.type === "notice") {
+        const result = JSON.stringify(sharesAcquisition);
+        // convert result to hex
+        const hexresult = stringToHex(result);
+        advance_req = await fetch(rollup_server + "/notice", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ payload: hexresult }),
+        });
+      }
     }
     //{"method":"shares_withdraw", "msg_sender":"your address","company": "1"}
     else if (JSONpayload.method === "shares_withdraw") {
@@ -110,16 +123,20 @@ async function handle_advance(data) {
       );
       console.log("withdrawing company status....");
       console.log("shares withdrawn: " + JSON.stringify(sharesWithdrawal));
-      // convert result to hex
-      const hexresult = stringToHex(sharesWithdrawal);
-      console.log("The result is :", hexresult);
-      advance_req = await fetch(rollup_server + "/notice", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ payload: hexresult }),
-      });
+
+      if (sharesWithdrawal.type === "notice") {
+        const result = JSON.stringify(sharesWithdrawal);
+        // convert result to hex
+        const hexresult = stringToHex(result);
+        console.log("The result is :", hexresult);
+        advance_req = await fetch(rollup_server + "/notice", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ payload: hexresult }),
+        });
+      }
     }
     //{"method":"company_get", "company_id":1}
     else if (JSONpayload.method === "company_get") {

@@ -5,16 +5,7 @@ import { Link } from "react-router-dom";
 import { allCompanyData } from "../constants";
 import { dvlogo } from "../assets";
 
-type Props = {};
-
-type Notice = {
-  id: string;
-  index: number;
-  input: any; //{index: number; epoch: {index: number; }
-  payload: string;
-};
-
-function hexToString(hex: any) {
+function hexToString(hex) {
   // Remove the '0x' prefix
   const strippedHexString = hex.slice(2);
 
@@ -26,17 +17,15 @@ function hexToString(hex: any) {
   return resultString;
 }
 
-const Companies: React.FC = (props: Props) => {
+const Companies = (props) => {
   const [showModal, setModal] = useState(false);
-
-  const [loading, setLoading] = useState<boolean>();
   const [result, reexecuteQuery] = useNoticesQuery();
   const { data, fetching, error } = result;
 
-  const notices: any =
+  const notices =
     data &&
     data.notices.edges
-      .map((node: any) => {
+      .map((node) => {
         const n = node.node;
         let inputPayload = n?.input.payload;
         if (inputPayload) {
@@ -59,14 +48,12 @@ const Companies: React.FC = (props: Props) => {
           payload = "(empty)";
         }
         return {
-          // id: `${n?.id}`,
-          // index: parseInt(n?.index),
           payload: JSON.parse(
             JSON.parse(
               JSON.stringify(
                 JSON.parse(
                   JSON.stringify(
-                    hexToString(JSON.parse(payload).createdCompany.payload)
+                    hexToString(JSON.parse(payload).payload)
                   )
                 )
               )
@@ -75,13 +62,26 @@ const Companies: React.FC = (props: Props) => {
           input: n ? { index: n.input.index, payload: inputPayload } : {},
         };
       })
-      .sort((b: any, a: any) => {
+      .sort((b, a) => {
         if (a.input.index === b.input.index) {
           return b.index - a.index;
         } else {
           return b.input.index - a.input.index;
         }
       });
+
+  // Function to filter out duplicates based on a specific key
+  function filterDuplicates(array, key) {
+    const uniqueKeys = new Set();
+    return array.filter(obj => {
+      const keyValue = obj[key];
+      if (!uniqueKeys.has(keyValue)) {
+        uniqueKeys.add(keyValue);
+        return true;
+      }
+      return false;
+    });
+  }
 
   return (
     <div className="bg-white p-10 mt-20">
@@ -100,11 +100,11 @@ const Companies: React.FC = (props: Props) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-8">
         {notices &&
           notices.length > 0 &&
-          notices.map((item: any, index: number) => (
-            <div key={item} className="border rounded-md shadow-md">
+          filterDuplicates(notices, 'companyName').map((item, index) => (
+            <div key={index} className="border rounded-md shadow-md">
               <div key={index} className=" px-4 py-3 text-black">
                 <div className="flex flex-row items-center justify-between">
-                  <img src={dvlogo} alt="Company-Logo" width={100} />
+                  <img src={`https://ipfs.io/${item?.payload?.companyLogo}`} alt="Company-Logo" width={100} />
 
                   <div className="flex flex-col text-sm">
                     <h2 className="font-medium text-md">
