@@ -69,19 +69,26 @@ const Companies = (props) => {
           return b.input.index - a.input.index;
         }
       });
-
   // Function to filter out duplicates based on a specific key
-  function filterDuplicates(array, key) {
-    const uniqueKeys = new Set();
-    return array.filter(obj => {
-      const keyValue = obj[key];
-      if (!uniqueKeys.has(keyValue)) {
-        uniqueKeys.add(keyValue);
-        return true;
+  function filterDuplicates(arr, key) {
+    // Create an object to store unique company objects based on their id
+    const uniqueCompanies = arr.reduce((acc, current) => {
+      const companyId = current.payload.id;
+
+      // Only add the company to the accumulator if it has status 1
+      if (current.payload.status === 1) {
+        acc[companyId] = current;
       }
-      return false;
-    });
+
+      return acc;
+    }, {});
+
+    // Convert the values of the uniqueCompanies object back to an array
+    const resultArray = Object.values(uniqueCompanies);
+
+    return resultArray;
   }
+
 
   return (
     <div className="bg-white p-10 mt-20">
@@ -100,7 +107,7 @@ const Companies = (props) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-8">
         {notices &&
           notices.length > 0 &&
-          filterDuplicates(notices, 'companyName').map((item, index) => (
+          filterDuplicates(notices, 'companyLogo').map((item, index) => (
             <div key={index} className="border rounded-md shadow-md">
               <div key={index} className=" px-4 py-3 text-black">
                 <div className="flex flex-row items-center justify-between">

@@ -21,16 +21,23 @@ const CompanyDetails = () => {
   const company = allCompanyData.find((company) => company.id === id);
 
   // Function to filter out duplicates based on a specific key
-  function filterDuplicates(array, key) {
-    const uniqueKeys = new Set();
-    return array.filter(obj => {
-      const keyValue = obj[key];
-      if (!uniqueKeys.has(keyValue)) {
-        uniqueKeys.add(keyValue);
-        return true;
-      }
-      return false;
-    });
+
+  function findCompanyWithConditions(dataArray) {
+    // Filter companies with active status and non-empty shareholders
+    const activeCompanies = dataArray.filter(
+      company => company.payload.status === 1 && company.payload.shareHolders.length > 0 && company.payload.id === id
+    );
+
+    // If there are active companies, return the last one
+    if (activeCompanies.length > 0) {
+      return activeCompanies[activeCompanies.length - 1];
+    }
+
+    // If no active companies found, return the first company with status 0
+    const inactiveCompany = dataArray.find(company => company.payload.status === 1 && company.payload.id === id);
+    console.log(inactiveCompany)
+
+    return inactiveCompany || null; // Return null if no matching company is found
   }
   useEffect(() => {
     const fetchData = async () => {
@@ -110,10 +117,10 @@ const CompanyDetails = () => {
             }
           });
 
+        const g = findCompanyWithConditions(parsed)
 
-        const g = filterDuplicates(parsed.filter((i) => i.payload.status === 1), 'id')
-        console.log(parsed)
-        setData(g[3].payload)
+        setData(g.payload)
+        // console.log(parsed.find((i) => i.payload.status === 1))
 
         // const hexData = result.data.input.notices.edges[0].node.payload
 
@@ -238,7 +245,7 @@ const CompanyDetails = () => {
 
       </div>
 
-      <ShareHolderStats shareHolders={dataInfo?.shareHolders} />
+      <ShareHolderStats shareHolders={dataInfo?.shareHolders.length > 0 && dataInfo?.shareHolders} />
     </div>
   );
 };
