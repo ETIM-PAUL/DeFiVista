@@ -7,8 +7,22 @@ import Logo from "./Logo";
 const CompanyDetails = () => {
   // Get the id from the URL
   const { id } = useParams();
-  const [data, setData] = useState<any>()
-  const [loading, setLoading] = useState<boolean>()
+  const [data, setData] = useState<any>();
+  const [loading, setLoading] = useState<boolean>();
+
+  const [showModal, setModal] = useState(false);
+
+  const [numberOfShares, setNumberOfShares] = useState(0);
+  const [totalShares, setTotalShares] = useState(0);
+
+  // Function to calculate total shares
+  const calculateTotalShares = () => {
+    if (numberOfShares >= data?.minShare) {
+      setTotalShares(numberOfShares * data?.pricePerShare);
+    } else {
+      setTotalShares(0);
+    }
+  };
 
   // Find the company with the matching id
   const company = allCompanyData.find((company) => company.id === id);
@@ -16,10 +30,10 @@ const CompanyDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8080/graphql', {
-          method: 'POST',
+        const response = await fetch("http://localhost:8080/graphql", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             query: `{
@@ -42,11 +56,14 @@ const CompanyDetails = () => {
         }
 
         const result = await response.json();
-        const hexData = result.data.input.notices.edges[0].node.payload
+        const hexData = result.data.input.notices.edges[0].node.payload;
 
-        setData(JSON.parse(hexToString(JSON.parse(hexToString(hexData)).createdCompany.payload)));
+        setData(
+          JSON.parse(
+            hexToString(JSON.parse(hexToString(hexData)).createdCompany.payload)
+          )
+        );
         setLoading(false);
-
       } catch (error) {
         setLoading(false);
       }
@@ -59,12 +76,9 @@ const CompanyDetails = () => {
     return <div>No company found with this ID.</div>;
   }
 
-
-
   // Display the company's details
   return (
     <div className="bg-white mt-20">
-
       <div
         className={`flex justify-center flex-col-reverse md:flex-row items-center pt-10 w-full h-full mx-0 p-0`}
       >
@@ -73,61 +87,50 @@ const CompanyDetails = () => {
             <div>
               <h3 className="mt-5 text-xl flex items-center">
                 <span className="font-bold">{data?.companyName} ~ </span>
-                <span className="text-sm pt-1">{" "}{data?.regNum}</span>
+                <span className="text-sm pt-1"> {data?.regNum}</span>
               </h3>
-              <p className="max-w-[300px] my-4">
-                {data?.description}
-              </p>
+              <p className="max-w-[300px] my-4">{data?.description}</p>
               <div className="font-medium leading-6 mt-4">
                 <div className="flex justify-between mb-2">
-                  <div className="text-[#44494E] capitalize">
-                    Country
-                  </div>
+                  <div className="text-[#44494E] capitalize">Country</div>
                   <div>{data?.country}</div>
                 </div>
                 <hr />
                 <div className="flex justify-between mb-2">
-                  <div className="text-[#44494E] capitalize">
-                    State
-                  </div>
+                  <div className="text-[#44494E] capitalize">State</div>
                   <div>{data?.state}</div>
                 </div>
                 <hr />
                 <div className="flex justify-between my-2">
-                  <div className="text-[#44494E]">
-                    Price Per Share
-                  </div>
+                  <div className="text-[#44494E]">Price Per Share</div>
                   <div>{data?.pricePerShare}</div>
                 </div>
                 <hr />
                 <div className="flex justify-between my-2">
-                  <div className="text-[#44494E]">
-                    Minimum Shares
-                  </div>
+                  <div className="text-[#44494E]">Minimum Shares</div>
                   <div>{data?.minShare}</div>
                 </div>
               </div>
             </div>
           </div>
-          <div
-            className=""
-            id="stripe-payment-form"
-          >
+          <div className="" id="stripe-payment-form">
             <div className="flex-col">
-
               <img
                 src={company.companyLogo}
                 className="w-[100px] sm:w-[200px]"
               />
 
               <div className="flex w-full mt-3">
-                <button className="btn btn-ghost w-full text-lg font-bold bg-base-100">
+                <button
+                  className="btn btn-ghost w-full text-lg font-bold bg-base-100"
+                  onClick={() => setModal(true)}
+                >
                   Buy Shares
                 </button>
+
+                <label>Suggest Investment</label>
               </div>
-              <div
-                className="flex items-center w-full mt-3"
-              >
+              <div className="flex items-center w-full mt-3">
                 <button className="btn btn-ghost w-full text-lg font-bold bg-base-100">
                   Withdraw Shares
                 </button>
@@ -136,7 +139,6 @@ const CompanyDetails = () => {
             </div>
           </div>
         </div>
-
       </div>
       {/* <div className="flex flex-row justify-between items-center mx-20 text- text-black">
         <img
@@ -177,8 +179,56 @@ const CompanyDetails = () => {
       </div> */}
 
       <ShareHolderStats shareHolders={data?.shareHolders} />
+
+      {showModal && (
+        <>
+          <input
+            type="checkbox"
+            checked
+            id="my_modal_6"
+            className="modal-toggle"
+          />
+          <div className="modal" role="dialog">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg">
+                Buy More Shares Seamlessy at DeFiVista
+              </h3>
+
+              <input
+                type="number"
+                placeholder="Enter Number of Shares"
+                value={numberOfShares}
+                onChange={(e: any) => {
+                  setNumberOfShares(e.target.value);
+                  calculateTotalShares();
+                }}
+              />
+              <input
+                type="number"
+                placeholder="Total Shares"
+                value={totalShares}
+                disabled
+              />
+              <div className="modal-action">
+                <label
+                  onClick={() => setModal(false)}
+                  htmlFor="my_modal_6 bg-"
+                  className="btn"
+                >
+                  Close!
+                </label>
+                <Link
+                  to="./user-details"
+                  className="btn bg-white text-black hover:bg-white"
+                >
+                  Proceed!
+                </Link>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
-
 export default CompanyDetails;
