@@ -14,6 +14,8 @@ import React from "react";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -72,6 +74,7 @@ const router = createBrowserRouter([
 root.render(
   <React.StrictMode>
     <RouterProvider router={router} />
+    <ToastContainer />
   </React.StrictMode>
 );
 

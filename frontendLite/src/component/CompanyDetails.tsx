@@ -63,9 +63,82 @@ const CompanyDetails = () => {
 
   // Display the company's details
   return (
-    <div className="bg-white mt-14">
+    <div className="bg-white mt-20">
 
-      <div className="flex flex-row justify-between items-center mx-20 text- text-black">
+      <div
+        className={`flex justify-center flex-col-reverse md:flex-row items-center pt-10 w-full h-full mx-0 p-0`}
+      >
+        <div className="flex justify-between gap-4 px-7 py-7 mx-4 sm:mx-0 w-sm sm:w-[550px] w-full bg-white my-0 h-fit border shadow-md rounded-lg border-black">
+          <div className="items-center justify-center flex">
+            <div>
+              <h3 className="mt-5 text-xl flex items-center">
+                <span className="font-bold">{data?.companyName} ~ </span>
+                <span className="text-sm pt-1">{" "}{data?.regNum}</span>
+              </h3>
+              <p className="max-w-[300px] my-4">
+                {data?.description}
+              </p>
+              <div className="font-medium leading-6 mt-4">
+                <div className="flex justify-between mb-2">
+                  <div className="text-[#44494E] capitalize">
+                    Country
+                  </div>
+                  <div>{data?.country}</div>
+                </div>
+                <hr />
+                <div className="flex justify-between mb-2">
+                  <div className="text-[#44494E] capitalize">
+                    State
+                  </div>
+                  <div>{data?.state}</div>
+                </div>
+                <hr />
+                <div className="flex justify-between my-2">
+                  <div className="text-[#44494E]">
+                    Price Per Share
+                  </div>
+                  <div>{data?.pricePerShare}</div>
+                </div>
+                <hr />
+                <div className="flex justify-between my-2">
+                  <div className="text-[#44494E]">
+                    Minimum Shares
+                  </div>
+                  <div>{data?.minShare}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className=""
+            id="stripe-payment-form"
+          >
+            <div className="flex-col">
+
+              <img
+                src={company.companyLogo}
+                className="w-[100px] sm:w-[200px]"
+              />
+
+              <div className="flex w-full mt-3">
+                <button className="btn btn-ghost w-full text-lg font-bold bg-base-100">
+                  Buy Shares
+                </button>
+              </div>
+              <div
+                className="flex items-center w-full mt-3"
+              >
+                <button className="btn btn-ghost w-full text-lg font-bold bg-base-100">
+                  Withdraw Shares
+                </button>
+              </div>
+              {/* )} */}
+            </div>
+          </div>
+        </div>
+
+      </div>
+      {/* <div className="flex flex-row justify-between items-center mx-20 text- text-black">
         <img
           src={company.companyLogo}
           alt="Company-Logo"
@@ -89,8 +162,6 @@ const CompanyDetails = () => {
         </div>
       </div>
 
-      {/* ...display other details... */}
-
       <p className="flex text-center text-black text-sm mx-20 leading-8">
         {data?.description}
       </p>
@@ -103,7 +174,7 @@ const CompanyDetails = () => {
         <button className="   bg-white btn btn-ghost text-black border border-black text-lg font-bold">
           Sell Shares
         </button>
-      </div>
+      </div> */}
 
       <ShareHolderStats shareHolders={data?.shareHolders} />
     </div>
