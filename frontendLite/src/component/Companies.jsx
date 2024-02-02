@@ -108,7 +108,7 @@ const Companies = (props) => {
         {notices &&
           notices.length > 0 &&
           filterDuplicates(notices, 'companyLogo').map((item, index) => (
-            <div key={index} className="border rounded-md shadow-md">
+            <div key={index} className="border flex flex-col justify-between rounded-md shadow-md">
               <div key={index} className=" px-4 py-3 text-black">
                 <div className="flex flex-row items-center justify-between">
                   <img src={`https://ipfs.io/${item?.payload?.companyLogo}`} alt="Company-Logo" width={100} />

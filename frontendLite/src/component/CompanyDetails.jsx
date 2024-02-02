@@ -7,10 +7,12 @@ import { useRollups } from "../useRollups";
 import { ethers } from "ethers";
 import { toast } from "react-toastify";
 import { useNoticesQuery } from "../generated/graphql";
+import { useConnectWallet } from "@web3-onboard/react";
 
 const CompanyDetails = () => {
   // Get the id from the URL
   const { id } = useParams();
+  const [wallet] = useConnectWallet();
   const [dataInfo, setData] = useState()
   const [loading, setLoading] = useState()
   const rollups = useRollups("0x70ac08179605AF2D9e75782b8DEcDD3c22aA4D0C");
@@ -25,7 +27,7 @@ const CompanyDetails = () => {
   function findCompanyWithConditions(dataArray) {
     // Filter companies with active status and non-empty shareholders
     const activeCompanies = dataArray.filter(
-      company => company.payload.status === 1 && company.payload.shareHolders.length > 0 && company.payload.id === id
+      company => company.payload.status === 1 && company.payload.shareHolders.length > 0 && company.payload.id === Number(id)
     );
 
     // If there are active companies, return the last one
@@ -34,7 +36,7 @@ const CompanyDetails = () => {
     }
 
     // If no active companies found, return the first company with status 0
-    const inactiveCompany = dataArray.find(company => company.payload.status === 1 && company.payload.id === id);
+    const inactiveCompany = dataArray.find(company => company.payload.status === 1 && company.payload.id === Number(id));
     console.log(inactiveCompany)
 
     return inactiveCompany || null; // Return null if no matching company is found
@@ -118,7 +120,6 @@ const CompanyDetails = () => {
           });
 
         const g = findCompanyWithConditions(parsed)
-
         setData(g.payload)
         // console.log(parsed.find((i) => i.payload.status === 1))
 
@@ -161,11 +162,18 @@ const CompanyDetails = () => {
     }
   };
 
+  function checkShare(array, address) {
+    const hasGivenEvmAddress = array?.map(shareholder => {
+      return shareholder.msg_sender === address;
+    });
+    const containsGivenEvmAddress = hasGivenEvmAddress?.includes(true);
+    return containsGivenEvmAddress
+  }
+
   // If no company was found, show a message
   if (!company) {
     return <div>No company found with this ID.</div>;
   }
-
 
 
   // Display the company's details
@@ -208,9 +216,9 @@ const CompanyDetails = () => {
                 <hr />
                 <div className="flex justify-between my-2">
                   <div className="text-[#44494E]">
-                    Minimum Shares
+                    Minimum Shares You can Purchased
                   </div>
-                  <div>{dataInfo?.shareHolders.length}</div>
+                  <div>{" "} {dataInfo?.minShare}</div>
                 </div>
               </div>
             </div>
@@ -231,13 +239,15 @@ const CompanyDetails = () => {
                   Buy Shares
                 </button>
               </div>
-              <div
-                className="flex items-center w-full mt-3"
-              >
-                <button className="btn btn-ghost w-full text-lg font-bold bg-base-100">
-                  Withdraw Shares
-                </button>
-              </div>
+              {checkShare(dataInfo?.shareHolders, wallet?.wallet?.accounts?.[0]?.address) &&
+                <div
+                  className="flex items-center w-full mt-3"
+                >
+                  <button className="btn btn-ghost w-full text-lg font-bold bg-base-100">
+                    Withdraw Shares
+                  </button>
+                </div>
+              }
 
             </div>
           </div>
