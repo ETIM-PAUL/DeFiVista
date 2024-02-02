@@ -172,6 +172,7 @@ function shares_purchase(
 function shares_withdraw(
   msg_sender,
   company_id,
+  amount
 ) {
   try {
     if (!company_exist(
@@ -198,15 +199,14 @@ function shares_withdraw(
     //   BigInt(winning_bid.amount.toString())
     // );
 
-    const details = { msg_sender, company_id, amount_of_shares, amount }
 
-    company.acquisition_withdraw(msg_sender, company_id);
+    company.acquisition_withdraw(msg_sender, company_id, amount);
 
     //update price of shares as more buyers buy
     let keyToUpdate = company_id;
     if (companies.has(keyToUpdate)) {
       let updatedObject = companies.get(keyToUpdate);
-      updatedObject.pricePerShare = (updatedObject.pricePerShare - ((amount_of_shares / 100) * 10));
+      updatedObject.pricePerShare = (updatedObject.pricePerShare - ((amount / 100) * 10));
 
       // Update the object in the map
       companies.set(keyToUpdate, updatedObject);

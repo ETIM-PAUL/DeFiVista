@@ -103,7 +103,7 @@ class CompanyShares {
 
     if (existingObjectIndex !== -1) {
       // If the object exists, update the amount
-      this.shareHolders[existingObjectIndex].amount_of_shares += acquisition?.amount_of_shares;
+      this.shareHolders[existingObjectIndex].amount_of_shares += Number(acquisition?.amount_of_shares);
     } else {
       // If the object doesn't exist, add a new object
       this.shareHolders.push(acquisition);
@@ -127,7 +127,7 @@ class CompanyShares {
         return new EvalError("Insufficient shares amount");
       }
       // If the object exists, update the amount
-      this.shareHolders[existingObjectIndex].amount_of_shares -= amount;
+      this.shareHolders[existingObjectIndex].amount_of_shares -= Number(amount);
     } else {
       // If the object doesn't exist, add a new object
       return new EvalError("No shares in this company");

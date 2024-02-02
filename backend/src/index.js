@@ -115,11 +115,12 @@ async function handle_advance(data) {
         });
       }
     }
-    //{"method":"shares_withdraw", "msg_sender":"your address","company": "1"}
+    //{"method":"shares_withdraw", "msg_sender":"your address","company": "1","amount":2}
     else if (JSONpayload.method === "shares_withdraw") {
       let sharesWithdrawal = shares_withdraw(
         data.metadata.msg_sender,
-        JSONpayload.company_id
+        JSONpayload.company_id,
+        JSONpayload.amount
       );
       console.log("withdrawing company status....");
       console.log("shares withdrawn: " + JSON.stringify(sharesWithdrawal));

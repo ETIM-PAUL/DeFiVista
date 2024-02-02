@@ -14,19 +14,17 @@ const UserDetail = (props: Props) => {
 
   return (
     <>
-      <LoggedNav />
-
-      <div className="mt-10">
+      <div className="bg-white p-10 mt-20 mb-28">
         <form
           action=""
-          className=" mx-auto block w-fit border shadow-md px-4 text-sm bg-white rounded-lg py-32 text-black"
+          className=" mx-auto block w-fit border shadow-md px-4 text-sm bg-white rounded-lg pt-6 pb-6 text-black"
         >
           <span className="block text-center text-xl font-bold">
             User Details
           </span>
           <div className="space-y-6 pt-10">
             <div className="flex flex-row  gap-14   ">
-              <div className="flex flex-col space-y-1 ">
+              <div className="flex flex-col space-y-1 w-full">
                 <label htmlFor="firstName">First Name</label>
                 <input
                   value={firstName}
@@ -34,11 +32,11 @@ const UserDetail = (props: Props) => {
                   type="text"
                   placeholder="First Name"
                   required
-                  className="rounded h-[40px] bg-transparent border border-[#999999] outline-none p-3 "
+                  className="rounded h-[40px] bg-transparent border border-[#999999] outline-none p-3 w-full"
                 />
               </div>
 
-              <div className="flex flex-col space-y-1 ">
+              <div className="flex flex-col space-y-1 w-full">
                 <label htmlFor="lastName">Last Name</label>
                 <input
                   value={lastName}
@@ -46,7 +44,7 @@ const UserDetail = (props: Props) => {
                   type="text"
                   placeholder="Last Name"
                   required
-                  className="rounded  h-[40px] bg-transparent border border-[#999999]  outline-none p-3 "
+                  className="rounded  h-[40px] bg-transparent border border-[#999999]  outline-none p-3 w-full"
                 />
               </div>
             </div>
@@ -54,7 +52,7 @@ const UserDetail = (props: Props) => {
             {/*  */}
 
             <div className="flex flex-row  gap-14   ">
-              <div className="flex flex-col space-y-1 ">
+              <div className="flex flex-col space-y-1 w-full">
                 <label htmlFor="country">Country</label>
                 <input
                   value={country}
@@ -68,7 +66,7 @@ const UserDetail = (props: Props) => {
                 />
               </div>
 
-              <div className="flex flex-col space-y-1 ">
+              <div className="flex flex-col space-y-1 w-full">
                 <label htmlFor="phoneNumber">Age</label>
                 <input
                   value={age}
@@ -128,8 +126,6 @@ const UserDetail = (props: Props) => {
           </button>
         </form>
       </div>
-
-      <Footer />
     </>
   );
 };
