@@ -1,8 +1,9 @@
 import React from "react";
-import CreateCompany from "../component/CreateCompany";
+
 import LoggedNav from "../component/LoggedNav";
 import Footer from "../component/Footer";
 import { GraphQLProvider } from "../GraphQL";
+import CreateCompany from "../component/CreateCompany";
 
 type Props = {};
 
@@ -19,7 +20,6 @@ const CreateCompanyPage = (props: Props) => {
       <div>
         <Footer />
       </div>
-
     </div>
   );
 };

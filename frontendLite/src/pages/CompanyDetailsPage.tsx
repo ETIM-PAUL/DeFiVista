@@ -8,8 +8,8 @@ type Props = {};
 
 const CompanyDetailsPage = (props: Props) => {
   return (
-    <div className="flex flex-col justify-between h-screen bg-white">
-      <div className="bg-white">
+    <div className="flex flex-col justify-between h-scree bg-white">
+      <div className="bg-white h-full">
         <LoggedNav />
 
         <GraphQLProvider>

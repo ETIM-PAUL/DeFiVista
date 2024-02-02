@@ -7,7 +7,7 @@ const Footer = () => {
     // <section className="flex justify-center items-cente flex-col  bg-[#FFFFFF]">
 
     <div className="w-[100%] rounded- flex h-full justify-between items-center md:flex-row flex-col p-6 bg-[#080E26] ">
-      <p className="font-poppins font-normal text-[18px] text-center text-[#FFFFFF] leading-[27px]">
+      <p className="font-poppins font-normal text-xs text-center text-[#FFFFFF] leading-[27px]">
         Copyright Ⓒ 2024 defivista. All Rights Reserved.
       </p>
 

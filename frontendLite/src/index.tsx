@@ -14,6 +14,8 @@ import React from "react";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -23,6 +25,7 @@ import MyCompanyPage from "./pages/MyCompanyPage";
 import AdminPage from "./pages/AdminPage";
 import CreateCompanyPage from "./pages/CreateCompanyPage";
 import CompanyDetailsPage from "./pages/CompanyDetailsPage";
+import UserDetailPage from "./pages/UserDetailPage";
 const container = document.getElementById("root");
 const root = createRoot(container!); // createRoot(container!) if you use TypeScript
 
@@ -58,6 +61,11 @@ const router = createBrowserRouter([
   },
 
   {
+    path: "/user-details",
+    element: <UserDetailPage />,
+  },
+
+  {
     path: "/contact",
     element: <Contact />,
   },
@@ -66,6 +74,7 @@ const router = createBrowserRouter([
 root.render(
   <React.StrictMode>
     <RouterProvider router={router} />
+    <ToastContainer />
   </React.StrictMode>
 );
 
